@@ -1,8 +1,7 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import org.apache.commons.cli.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +21,7 @@ public class Main {
 
         try {
             CommandLine cmd = parser.parse(options, args);  // parses the command-line arguments
-            String mazeFile = cmd.getOptionValue("i");  // assigns the maze text file into to mazeFile
+            String mazeFile = cmd.getOptionValue("i");  // assigns the maze text file to mazeFile
             logger.info("** Starting Maze Runner");
 
             try {
@@ -39,6 +38,9 @@ public class Main {
                     }
                     logger.trace(System.lineSeparator());
                 }
+                Maze maze = new Maze(mazeFile);
+                maze.printMaze();
+                reader.close();
             } catch(Exception e) {
                 logger.error("/!\\ An error has occured /!\\");
             }
