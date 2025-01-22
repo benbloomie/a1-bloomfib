@@ -40,6 +40,10 @@ public class Main {
                 }
                 Maze maze = new Maze(mazeFile);
                 maze.printMaze();
+
+                String basePath = "FFFFF";
+                MazeExplorer explorer = new MazeExplorer(basePath, maze);
+
                 reader.close();
             } catch(Exception e) {
                 logger.error("/!\\ An error has occured /!\\");
