@@ -1,7 +1,5 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-import java.io.BufferedReader;
-import java.io.*;
 import org.apache.commons.cli.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,32 +22,15 @@ public class Main {
             String mazeFile = cmd.getOptionValue("i");  // assigns the maze text file to mazeFile
             logger.info("** Starting Maze Runner");
 
-            try {
-                logger.info("**** Reading the maze from file: {}", mazeFile);  
-                BufferedReader reader = new BufferedReader(new FileReader(mazeFile));  // reads from retreived file path
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    for (int idx = 0; idx < line.length(); idx++) {
-                        if (line.charAt(idx) == '#') {
-                            logger.trace("WALL ");
-                        } else if (line.charAt(idx) == ' ') {
-                            logger.trace("PASS ");
-                        }
-                    }
-                    logger.trace(System.lineSeparator());
-                }
-                Maze maze = new Maze(mazeFile);
-                maze.printMaze();
+            Maze maze = new Maze(mazeFile);
+            maze.printMaze();
 
-                String basePath = "FFFFF";
-                MazeExplorer explorer = new MazeExplorer(basePath, maze);
+            String basePath = "FFFFF";  // IMPLEMENT -P FLAG LOGIC HERE
+            MazeExplorer explorer = new MazeExplorer(maze);
+            explorer.verifyInputPath(basePath);
 
-                reader.close();
-            } catch(Exception e) {
-                logger.error("/!\\ An error has occured /!\\");
-            }
         } catch (Exception e) {
-            logger.error("/!\\ An error has occured while reading command-line arguments /!\\");
+            logger.error("/!\\ An error has occured /!\\");
         }
         logger.info("**** Computing path");
         logger.warn("PATH NOT COMPUTED");
