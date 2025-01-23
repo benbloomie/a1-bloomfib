@@ -12,28 +12,41 @@ public class Main {
         Option iFlag = Option.builder("i")  // creates an argument option for the "-i" flag
             .hasArg()
             .desc("Text file that contains the maze.")
-            .required()
+            .required() // i flag is required for the program to run
             .build();
         options.addOption(iFlag);  // add the option flag "-i"
-        CommandLineParser parser = new DefaultParser();  // creates a parser for reading command-line arguments
 
+        Option pFlag = Option.builder("p")
+            .hasArg()
+            .desc("Move path containing various move directions")
+            .build();
+        options.addOption(pFlag);  // add the option flag "-p"
+
+        CommandLineParser parser = new DefaultParser();  // creates a parser for reading command-line arguments
         try {
             CommandLine cmd = parser.parse(options, args);  // parses the command-line arguments
             String mazeFile = cmd.getOptionValue("i");  // assigns the maze text file to mazeFile
             logger.info("** Starting Maze Runner");
-
             Maze maze = new Maze(mazeFile);
             maze.printMaze();
 
-            String basePath = "FFFFF";  // IMPLEMENT -P FLAG LOGIC HERE
+            String moveSequence = cmd.getOptionValue("p");
             MazeExplorer explorer = new MazeExplorer(maze);
-            explorer.verifyInputPath(basePath);
+            // checks if the user provided a move sequence to determine which algorithm to call
+            if (moveSequence != null) {
+                logger.info("**** Verifying path");
+                explorer.verifyInputPath(moveSequence);
+                logger.info("** End of MazeRunner");
+            }
+            else {
+                // call the algorithm to find the path
+                logger.info("**** Computing path");
+                logger.warn("PATH NOT COMPUTED");
+                logger.info("** End of MazeRunner");
+            }
 
         } catch (Exception e) {
             logger.error("/!\\ An error has occured /!\\");
-        }
-        logger.info("**** Computing path");
-        logger.warn("PATH NOT COMPUTED");
-        logger.info("** End of MazeRunner");
+        };
     }
 }

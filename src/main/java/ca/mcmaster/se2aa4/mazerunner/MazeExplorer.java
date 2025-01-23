@@ -17,9 +17,10 @@ public class MazeExplorer {
         // continue looping until every path movement has been read
         for (int i = 0; i < moveSequence.length(); i++) {
             char currentMove = moveSequence.charAt(i);
-            logger.trace("Move {}: {}", i + 1, currentMove); // Log each move
             directionAnalyzer.moveExplorer(currentMove);  // passes through each move to update the position
+            logger.trace("Move {}: {}", i + 1, currentMove); // log each move
         }
+        // checks if the explorer successfully completed the maze 
         if (verifyMaze()) {
             logger.info("Explorer has escaped the maze!");
         }
@@ -29,6 +30,7 @@ public class MazeExplorer {
     }
 
     public boolean verifyMaze() {
+        // initializes arrays for the exit position and the position that the explorer ends at
         int[] exitPosition = maze.getExit();
         int[] currentPosition = directionAnalyzer.getPosition();
         // compares row and column positions after all path moves have been made
