@@ -14,6 +14,8 @@ public class MazeExplorer {
     }
 
     public void verifyInputPath(String moveSequence) {
+        moveSequence = checkPathFormat(moveSequence);
+
         // continue looping until every path movement has been read
         for (int i = 0; i < moveSequence.length(); i++) {
             char currentMove = moveSequence.charAt(i);
@@ -40,6 +42,41 @@ public class MazeExplorer {
             return true;
         }
         return false;
+    }
+
+    public String checkPathFormat(String pathString) {
+        // reads through the move sequence to check for a number
+        for (int i = 0; i < pathString.length(); i++) {
+            // if a number is present convert from factorized form to canonical form
+            if (Character.isDigit(pathString.charAt(i))) {
+                String canonicalPath = factorizedToCanonical(pathString);
+                return canonicalPath;
+            }
+        }
+        return pathString;  // return the same String if no number was detected in the sequence
+    }
+
+    public String factorizedToCanonical(String pathString) {
+        StringBuffer canonicalSequence = new StringBuffer();
+        int repeatNumber;
+        String repeatDirection;
+        // loops through the entire path sequence
+        for (int i = 0; i < pathString.length(); i++) {
+            // case I: repeat direction number occurs before the move direction
+            if (Character.isDigit(pathString.charAt(i))) {
+                repeatNumber = Integer.parseInt(String.valueOf(pathString.charAt(i)));  // parses 'repeat number' char to its corresponding int value
+                repeatDirection = String.valueOf(pathString.charAt(++i)); // parses 'move direction' char to string, and moves past the move
+                // adds the direction for the number of times it is repeated
+                for (int j = 1; j <= repeatNumber; j++) {
+                    canonicalSequence.append(repeatDirection);
+                }
+            }
+            else {
+                canonicalSequence.append(pathString.charAt(i));
+            }
+        }
+        logger.trace("Converted sequence: {}", canonicalSequence.toString());
+        return canonicalSequence.toString();
     }
 
     public String findPath() {

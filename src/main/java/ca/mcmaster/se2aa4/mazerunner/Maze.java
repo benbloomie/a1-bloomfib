@@ -104,6 +104,10 @@ public class Maze {
         return this.maze;
     }
 
+    public int getLength() {
+        return this.numColumns;
+    }
+
     public int[] getEntrance(char facingDirection) {
         // determines what side of the maze the explorer starts on
         if (facingDirection == 'E') {
@@ -131,7 +135,4 @@ public class Maze {
         return this.exit;
     }
 
-    public int getLength() {
-        return this.numColumns;
-    }
 }

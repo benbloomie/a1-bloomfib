@@ -44,11 +44,10 @@ public class Main {
         flagOptions.addOption(iFlag);
         Option pFlag = setOption("p", "Move path containing various move directions", "N");
         flagOptions.addOption(pFlag);
-        
+
         return flagOptions;
     }
 
-    // method used to create command-line option flags
     public static Option setOption(String flag, String message, String required) {
         // checks if it is a required flag
         Option cmdFlag;
