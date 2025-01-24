@@ -32,8 +32,10 @@ public class Main {
             }
             logger.info("** End of MazeRunner");
 
+        } catch (ParseException e) {
+            logger.error("/!\\ An error has occured: {} /!\\", e.getMessage());
         } catch (Exception e) {
-            logger.error("/!\\ An error has occured /!\\");
+            logger.error("/!\\ An error has occured: {} /!\\", e.getMessage());
         }
     }
 
@@ -55,7 +57,6 @@ public class Main {
             cmdFlag = Option.builder(flag) 
                 .hasArg()  // flag must have an argument proceeding it
                 .desc(message)
-                .required()  // build with the required option
                 .build();
         }
         else {

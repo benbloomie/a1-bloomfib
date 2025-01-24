@@ -12,18 +12,20 @@ public class Maze {
     private int numColumns;
     private int numRows;
     // stores the positions of the entrances
-    public final int[] westEntrance;
-    public final int[] eastEntrance;
-    public int[] exit;
+    private final int[] westEntrance = new int[2];
+    private final int[] eastEntrance = new int[2];
+    private int[] exit;
 
     public Maze(String mazeFile) {
         this.maze = createMaze(mazeFile);
-        this.westEntrance = new int[2];
-        this.eastEntrance = new int[2];
+        if (this.maze == null) {
+            throw new IllegalArgumentException("Could not create maze.");
+        }
         findEntrances();
     }
 
     public char[][] createMaze(String mazeFile) {
+        logger.info("**** Reading the maze from file: {}", mazeFile);
         try {
             BufferedReader reader = new BufferedReader(new FileReader(mazeFile));
             ArrayList<String> linesInMaze = new ArrayList<>();  // stores each line of the text file in an ArrayList
@@ -54,11 +56,11 @@ public class Maze {
             return tempMaze;
 
         } catch(IOException e) {
-            logger.error("Unable to read data from the file {}", mazeFile);
+            logger.error("/!\\ An error has occured: Unable to read data from {} /!\\", mazeFile);
         } catch(Exception e) {
-            logger.error("An unexpected error occured while reading the file: {}", e.getMessage());
+            logger.error("/!\\\\ An error has occured /!\\\\: {}", e.getMessage());
         }
-        return null;
+        return null;  // returns null if an error occurs while reading the maze
     }
 
     // method to create a String for a completely empty line
@@ -86,8 +88,8 @@ public class Maze {
                 this.eastEntrance[1] = numColumns - 1;
             }
         }
-        logger.info("West entrance at: {}, {} (Row, column)", westEntrance[0], westEntrance[1]);
-        logger.info("East entrance at: {}, {} (Row, column)", eastEntrance[0], eastEntrance[1]);
+        logger.trace("West entrance at: [{}, {}] (Row, column)", westEntrance[0], westEntrance[1]);
+        logger.trace("East entrance at: [{}, {}] (Row, column)", eastEntrance[0], eastEntrance[1]);
     }
 
     public void printMaze() {
@@ -134,5 +136,4 @@ public class Maze {
     public int[] getExit() {
         return this.exit;
     }
-
 }
