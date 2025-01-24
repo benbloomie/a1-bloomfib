@@ -36,15 +36,19 @@ public class Maze {
     
             this.numColumns = linesInMaze.get(0).length();  // calculates the number of columns using the length of a line
             this.numRows = linesInMaze.size();  // calculates the number of rows using the number of elements in the array
-            char[][] tempMaze = new char[numColumns][numRows];
+            char[][] tempMaze = new char[numRows][numColumns];
+            String emptyLine = createEmptyLine();
     
-            int i = 0;
             // iterates through each string in the ArrayList to create the 2D array of the maze
-            for (String line: linesInMaze) {    
-                for (int j = 0; j < line.length(); j++) {
-                    tempMaze[i][j] = linesInMaze.get(i).charAt(j);
+            for (int i = 0; i < this.numRows; i++) {
+                String line = linesInMaze.get(i);
+                if (line.isEmpty()) {
+                    line = emptyLine;  // replace empty lines with the empty line string
                 }
-                i++;
+                logger.trace("Adding string: {}", line);
+                for (int j = 0; j < this.numColumns; j++) {
+                    tempMaze[i][j] = line.charAt(j); 
+                }
             }
             reader.close();
             return tempMaze;
@@ -55,6 +59,15 @@ public class Maze {
             logger.error("An unexpected error occured while reading the file: {}", e.getMessage());
         }
         return null;
+    }
+
+    // method to create a String for a completely empty line
+    public String createEmptyLine() {
+        StringBuffer emptyLineString = new StringBuffer();
+        for (int i = 0; i < this.numColumns; i++) {
+            emptyLineString.append(" ");
+        }
+        return emptyLineString.toString();
     }
 
     public void findEntrances() {
@@ -68,13 +81,13 @@ public class Maze {
                 this.westEntrance[1] = 0;
             }
             // searches the right wall for an opening, and assigns the same position
-            else if (this.maze[i][numColumns - 1] == ' ') {
+            if (this.maze[i][numColumns - 1] == ' ') {
                 this.eastEntrance[0] = i;
                 this.eastEntrance[1] = numColumns - 1;
             }
         }
-        logger.trace("West entrance at: {}, {} (Row, column)", westEntrance[0], westEntrance[1]);
-        logger.trace("East entrance at: {}, {} (Row, column)", eastEntrance[0], eastEntrance[1]);
+        logger.info("West entrance at: {}, {} (Row, column)", westEntrance[0], westEntrance[1]);
+        logger.info("East entrance at: {}, {} (Row, column)", eastEntrance[0], eastEntrance[1]);
     }
 
     public void printMaze() {
@@ -116,5 +129,9 @@ public class Maze {
 
     public int[] getExit() {
         return this.exit;
+    }
+
+    public int getLength() {
+        return this.numColumns;
     }
 }
