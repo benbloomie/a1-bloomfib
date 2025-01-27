@@ -51,6 +51,7 @@ public class DirectionAnalyzer {
                     if (currentRow - 1 >= 0 && maze.getMaze()[currentRow - 1][currentColumn] == ' ') {
                         this.position[0] = currentRow - 1;
                     }
+                    
                     break;
                 case 'E':
                     // moves the explorer to the right when reading 'F' in East direction
@@ -82,5 +83,14 @@ public class DirectionAnalyzer {
     // getter method to access the current position of the traveler
     public int[] getPosition() {
         return this.position;
+    }
+
+    public int getFacingDirectionValue() {
+        for (int i = 0; i < directions.length; i++) {
+            if (directions[i] == getFacingDirection()) {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException("Invalid move direction.");
     }
 }

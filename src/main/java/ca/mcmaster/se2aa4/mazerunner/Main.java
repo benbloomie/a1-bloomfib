@@ -26,9 +26,11 @@ public class Main {
                 explorer.verifyInputPath(moveSequence);
             }
             else {
-                // call the algorithm to find the path
                 logger.info("**** Computing path");
+                String pathSequence = explorer.findPath();
                 logger.warn("PATH NOT COMPUTED");
+                System.out.println(pathSequence);
+
             }
             logger.info("** End of MazeRunner");
 
