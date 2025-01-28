@@ -110,6 +110,14 @@ public class Maze {
         return this.numColumns;
     }
 
+    public int getHeight() {
+        return this.numRows;
+    }
+
+    public char getTile(int row, int column) {
+        return maze[row][column];
+    }
+
     public int[] getEntrance(char facingDirection) {
         // determines what side of the maze the explorer starts on
         if (facingDirection == 'E') {

@@ -118,11 +118,11 @@ public class MazeExplorer {
                 int newColumn = currentColumn + positions[i][1];
 
                 // checks if the new row and new column are valid before proceeding
-                if ((newColumn < 0 && newColumn >= maze.getLength()) && (newRow < 0 && newRow >= maze.getMaze().length)) {
+                if ((newColumn < 0 && newColumn >= maze.getLength()) && (newRow < 0 && newRow >= maze.getHeight())) {
                     logger.error("Position out of bounds.");
                 }
                 // if column and row values are valid, proceed forward 
-                else if (maze.getMaze()[newRow][newColumn] == ' ') {
+                else if (maze.getTile(newRow, newColumn) == ' ') {
                     if (i == directionAnalyzer.getFacingDirectionValue()) {
                         directionAnalyzer.moveExplorer('F');
                         logger.info("Moving F to new position: [{}, {}]", directionAnalyzer.getPosition()[0], directionAnalyzer.getPosition()[1]);
@@ -156,12 +156,12 @@ public class MazeExplorer {
         int currentColumn = directionAnalyzer.getPosition()[1];
 
         // if the explorer is facing north or east, add the values
-        if (facingDirection < 2 && maze.getMaze()[currentRow + rowMovement][currentColumn + columnMovement] == ' ') {
+        if (facingDirection < 2 && maze.getTile(currentRow + rowMovement, currentColumn + columnMovement) == ' ') {
             directionAnalyzer.moveExplorer('R');
             return true; 
         }
         // if the explorer is facing west or south, subtract the values
-        else if (facingDirection >= 2 && maze.getMaze()[currentRow - rowMovement][currentColumn - columnMovement] == ' ') {
+        else if (facingDirection >= 2 && maze.getTile(currentRow - rowMovement, currentColumn - columnMovement) == ' ') {
             directionAnalyzer.moveExplorer('R');
             return true;
         }

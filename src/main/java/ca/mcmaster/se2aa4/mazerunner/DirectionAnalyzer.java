@@ -48,26 +48,26 @@ public class DirectionAnalyzer {
             switch(getFacingDirection()) {
                 case 'N':
                     // moves the explorer up the maze when reading 'F' in North direction
-                    if (currentRow - 1 >= 0 && maze.getMaze()[currentRow - 1][currentColumn] == ' ') {
+                    if (currentRow - 1 >= 0 && maze.getTile(currentRow - 1, currentColumn) == ' ') {
                         this.position[0] = currentRow - 1;
                     }
                     
                     break;
                 case 'E':
                     // moves the explorer to the right when reading 'F' in East direction
-                    if (currentColumn + 1 < maze.getLength() && maze.getMaze()[currentRow][currentColumn + 1] == ' ') {
+                    if (currentColumn + 1 < maze.getLength() && maze.getTile(currentRow, currentColumn + 1) == ' ') {
                         position[1] = currentColumn + 1;
                     }
                     break;
                 case 'S':
                     // moves the explorer down the maze when reading 'F' in South direction
-                    if (currentRow + 1 < maze.getMaze().length && maze.getMaze()[currentRow + 1][currentColumn] == ' ') {
+                    if (currentRow + 1 < maze.getHeight() && maze.getTile(currentRow +1, currentColumn) == ' ') {
                         this.position[0] = currentRow + 1;
                     }
                     break;
                 case 'W':
                     // moves the explorer to the left when reading 'F' in West direction
-                    if (currentColumn - 1 >= 0 && maze.getMaze()[currentRow][currentColumn - 1] == ' ') {
+                    if (currentColumn - 1 >= 0 && maze.getTile(currentRow, currentColumn - 1) == ' ') {
                         position[1] = currentColumn - 1;
                     }
                     break;

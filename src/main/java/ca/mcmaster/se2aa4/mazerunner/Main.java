@@ -30,7 +30,6 @@ public class Main {
                 String pathSequence = explorer.findPath();
                 logger.warn("PATH NOT COMPUTED");
                 System.out.println(pathSequence);
-
             }
             logger.info("** End of MazeRunner");
 
@@ -53,20 +52,12 @@ public class Main {
     }
 
     public static Option setOption(String flag, String message, String required) {
-        // checks if it is a required flag
+        // creates a new option 
         Option cmdFlag;
-        if (required.equalsIgnoreCase("R")) {
-            cmdFlag = Option.builder(flag) 
-                .hasArg()  // flag must have an argument proceeding it
-                .desc(message)
-                .build();
-        }
-        else {
-            cmdFlag = Option.builder(flag) 
+        cmdFlag = Option.builder(flag) 
                 .hasArg()
                 .desc(message)
                 .build();
-        }
         return cmdFlag;
     }
 }
