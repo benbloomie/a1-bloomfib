@@ -50,10 +50,10 @@ public class MazeExplorer {
     public void didExplorerEscape() {
         // verifies if the path entered from the command-line is valid
         if (verifyPath()) {
-            System.out.println("Explorer has escaped the maze!");
+            System.out.println("correct path");
         }
         else {
-            System.out.println("Explorer did not reach the exit.");
+            System.out.println("incorrect path");
         }
     }
 
@@ -170,7 +170,30 @@ public class MazeExplorer {
     }
 
     public String generateFactorizedPath(String canonicalPath) {
-        // This method will convert the canonical path to the factorized path
-        return null;
+        StringBuffer factorizedPath = new StringBuffer();
+
+        // iterates through each character in the canonical string path
+        for (int i = 0; i < canonicalPath.length(); i++)  {
+            int movementCount = 1;
+            
+            // continues to loop while the current character is the same as the proceeding character
+            while (i + 1 < canonicalPath.length() && canonicalPath.charAt(i) == canonicalPath.charAt(i + 1)) {
+                movementCount++;  // increments the count for how many times the movement occurs in a row
+                i++;
+            }
+
+            // only append the movement count if the movement is repeated at least twice
+            if (movementCount >= 2) {
+                factorizedPath.append(Integer.toString(movementCount));
+                factorizedPath.append(canonicalPath.charAt(i));
+            }
+            // if there is only one occurence of the movement, just append the move
+            else {
+                factorizedPath.append(canonicalPath.charAt(i));
+            }
+            logger.info("Appending {}{}", movementCount, canonicalPath.charAt(i));
+        }
+        
+        return factorizedPath.toString();
     }
 }

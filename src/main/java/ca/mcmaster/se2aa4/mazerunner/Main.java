@@ -16,7 +16,6 @@ public class Main {
             String mazeFile = cmd.getOptionValue("i");  // assigns the maze text file to mazeFile
             logger.info("** Starting Maze Runner");
             Maze maze = new Maze(mazeFile);
-            maze.printMaze();
 
             String moveSequence = cmd.getOptionValue("p");
             MazeExplorer explorer = new MazeExplorer(maze);
@@ -29,7 +28,8 @@ public class Main {
                 logger.info("**** Computing path");
                 String pathSequence = explorer.findPath();
                 logger.warn("PATH NOT COMPUTED");
-                System.out.println(pathSequence);
+                String factorizedPathSequence = explorer.generateFactorizedPath(pathSequence);
+                System.out.println(factorizedPathSequence);
             }
             logger.info("** End of MazeRunner");
 
