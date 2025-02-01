@@ -14,25 +14,32 @@ public class Main {
         try {
             CommandLine cmd = parser.parse(options, args);  // parses the command-line arguments
             String mazeFile = cmd.getOptionValue("i");  // assigns the maze text file to mazeFile
-            logger.info("** Starting Maze Runner");
-            Maze maze = new Maze(mazeFile);
-            MazeExplorer explorer = new MazeExplorer(maze);
-
             String moveSequence = cmd.getOptionValue("p");
+
+            Maze maze = new Maze(mazeFile);
+            DirectionAnalyzer directionAnalyzer = new DirectionAnalyzer('E', maze, maze.getEntrance('E'));
             PathFormatter formatter = new PathFormatter();
+            logger.info("** Starting Maze Runner");
+
             // checks if the user provided a move sequence to determine which algorithm to call
             if (moveSequence != null) {
+                logger.info("**** Verifying path");
                 formatter.setCanonicalPath(moveSequence);
                 moveSequence = formatter.getCanonicalPath();
-                logger.info("**** Verifying path");
-                explorer.verifyInputPath(moveSequence);
+                MazeExplorer verifier = new PathVerifier(maze, directionAnalyzer, moveSequence);
+                verifier.exploreMaze();
+                String result = verifier.getPathResult();
+                System.out.println(result);
             }
+
             // if no -p flag is present, find the exit path sequence
             else {
                 logger.info("**** Computing path");
-                String pathSequence = explorer.findPath();
                 logger.warn("PATH NOT COMPUTED");
-                formatter.setFactorizedPath(pathSequence);
+                MazeExplorer finder = new PathFinder(maze, directionAnalyzer, new RightHandAlgorithm());
+                finder.exploreMaze();
+                String result = finder.getPathResult();
+                formatter.setFactorizedPath(result);
                 String factorizedPathSequence = formatter.getFactorizedPath();
                 System.out.println(factorizedPathSequence);
             }
