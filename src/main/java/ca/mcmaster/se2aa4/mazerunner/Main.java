@@ -16,31 +16,34 @@ public class Main {
             String mazeFile = cmd.getOptionValue("i");  // assigns the maze text file to mazeFile
             logger.info("** Starting Maze Runner");
             Maze maze = new Maze(mazeFile);
+            MazeExplorer explorer = new MazeExplorer(maze);
 
             String moveSequence = cmd.getOptionValue("p");
-            MazeExplorer explorer = new MazeExplorer(maze);
+            PathFormatter formatter = new PathFormatter();
             // checks if the user provided a move sequence to determine which algorithm to call
             if (moveSequence != null) {
+                formatter.setCanonicalPath(moveSequence);
+                moveSequence = formatter.getCanonicalPath();
                 logger.info("**** Verifying path");
                 explorer.verifyInputPath(moveSequence);
             }
+            // if no -p flag is present, find the exit path sequence
             else {
                 logger.info("**** Computing path");
                 String pathSequence = explorer.findPath();
                 logger.warn("PATH NOT COMPUTED");
-                String factorizedPathSequence = explorer.generateFactorizedPath(pathSequence);
+                formatter.setFactorizedPath(pathSequence);
+                String factorizedPathSequence = formatter.getFactorizedPath();
                 System.out.println(factorizedPathSequence);
             }
             logger.info("** End of MazeRunner");
 
-        } catch (ParseException e) {
-            logger.error("/!\\ An error has occured: {} /!\\", e.getMessage());
         } catch (Exception e) {
             logger.error("/!\\ An error has occured: {} /!\\", e.getMessage());
         }
     }
 
-    public static Options setOptions() {
+    private static Options setOptions() {
         Options flagOptions = new Options();  
         // sets the "-i" and "-p" flag with its corresponding message, and their requirement
         Option iFlag = setOption("i", "Text file that contains the maze.", "R");
@@ -51,7 +54,7 @@ public class Main {
         return flagOptions;
     }
 
-    public static Option setOption(String flag, String message, String required) {
+    private static Option setOption(String flag, String message, String required) {
         // creates a new option 
         Option cmdFlag;
         cmdFlag = Option.builder(flag) 

@@ -11,7 +11,7 @@ public class DirectionAnalyzer {
         this.maze = maze;
     }
 
-    public void setInitialDirection(char direction) {
+    private void setInitialDirection(char direction) {
         this.currentDirection = Direction.NORTH;  // initializes the direction to be north
         this.currentDirection = currentDirection.setInitialDirection(direction);  // updates starting direction to face the corrct way
     }

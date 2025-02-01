@@ -14,12 +14,6 @@ public class MazeExplorer {
     }
 
     public void verifyInputPath(String moveSequence) {
-        // verifies that the provide path can be analyzed before proceeding
-        if (moveSequence == null || moveSequence.isEmpty()) {
-            throw new IllegalArgumentException("Path cannot be empty.");
-        }
-        moveSequence = checkPathFormat(moveSequence);
-
         // continue looping until every path movement has been read
         for (int i = 0; i < moveSequence.length(); i++) {
             char currentMove = moveSequence.charAt(i);
@@ -34,7 +28,7 @@ public class MazeExplorer {
         didExplorerEscape();  // checks if the explorer successfully completed the maze 
     }
 
-    public boolean verifyPath() {
+    private boolean verifyPath() {
         // initializes arrays for the exit position and the position that the explorer ends at
         int[] exitPosition = maze.getExit();
         int[] currentPosition = directionAnalyzer.getPosition();
@@ -47,7 +41,7 @@ public class MazeExplorer {
         return false;
     }
 
-    public void didExplorerEscape() {
+    private void didExplorerEscape() {
         // verifies if the path entered from the command-line is valid
         if (verifyPath()) {
             System.out.println("correct path");
@@ -55,51 +49,6 @@ public class MazeExplorer {
         else {
             System.out.println("incorrect path");
         }
-    }
-
-    public String checkPathFormat(String pathString) {
-        // reads through the move sequence to check for a number
-        for (int i = 0; i < pathString.length(); i++) {
-            // if a number is present convert from factorized form to canonical form
-            if (Character.isDigit(pathString.charAt(i))) {
-                String canonicalPath = factorizedToCanonical(pathString);
-                return canonicalPath;
-            }
-        }
-        return pathString;  // return the same String if no number was detected in the sequence
-    }
-
-    public String factorizedToCanonical(String pathString) {
-        StringBuffer canonicalSequence = new StringBuffer();
-        int repeatNumber;
-        String repeatDirection;
-        // loops through the entire path sequence
-        for (int i = 0; i < pathString.length(); i++) {
-            // case I: repeat direction number occurs before the move direction
-            if (Character.isDigit(pathString.charAt(i))) {
-                // handles multi-digit numbers
-                StringBuffer numberString = new StringBuffer();
-                while (i < pathString.length() && Character.isDigit(pathString.charAt(i))) {
-                    numberString.append(pathString.charAt(i));
-                    i++;
-                }
-                // if i is greater, than no direction proceeds the repeat number
-                if (i >= pathString.length()) {
-                    throw new IllegalArgumentException("Invalid path format");
-                }
-                repeatNumber = Integer.parseInt(numberString.toString());  // parses 'repeat number' char to its corresponding int value
-                repeatDirection = String.valueOf(pathString.charAt(i));  // parses 'move direction' char to string
-                // adds the direction for the number of times it is repeated
-                for (int j = 1; j <= repeatNumber; j++) {
-                    canonicalSequence.append(repeatDirection);
-                }
-            }
-            else {
-                canonicalSequence.append(pathString.charAt(i));
-            }
-        }
-        logger.trace("Canonical path sequence: {}", canonicalSequence.toString());
-        return canonicalSequence.toString();
     }
 
     public String findPath() {
@@ -151,7 +100,7 @@ public class MazeExplorer {
         return pathSequence.toString();
     }
 
-    public boolean rightIsEmpty(int facingDirection, int rowMovement, int columnMovement) {
+    private boolean rightIsEmpty(int facingDirection, int rowMovement, int columnMovement) {
         int currentRow = directionAnalyzer.getPosition()[0];
         int currentColumn = directionAnalyzer.getPosition()[1];
 
@@ -169,31 +118,4 @@ public class MazeExplorer {
         return false;
     }
 
-    public String generateFactorizedPath(String canonicalPath) {
-        StringBuffer factorizedPath = new StringBuffer();
-
-        // iterates through each character in the canonical string path
-        for (int i = 0; i < canonicalPath.length(); i++)  {
-            int movementCount = 1;
-            
-            // continues to loop while the current character is the same as the proceeding character
-            while (i + 1 < canonicalPath.length() && canonicalPath.charAt(i) == canonicalPath.charAt(i + 1)) {
-                movementCount++;  // increments the count for how many times the movement occurs in a row
-                i++;
-            }
-
-            // only append the movement count if the movement is repeated at least twice
-            if (movementCount >= 2) {
-                factorizedPath.append(Integer.toString(movementCount));
-                factorizedPath.append(canonicalPath.charAt(i));
-            }
-            // if there is only one occurence of the movement, just append the move
-            else {
-                factorizedPath.append(canonicalPath.charAt(i));
-            }
-            logger.info("Appending {}{}", movementCount, canonicalPath.charAt(i));
-        }
-        
-        return factorizedPath.toString();
-    }
 }
