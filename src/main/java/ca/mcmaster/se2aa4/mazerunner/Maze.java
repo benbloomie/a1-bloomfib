@@ -88,8 +88,8 @@ public class Maze {
                 this.eastEntrance[1] = numColumns - 1;
             }
         }
-        logger.trace("West entrance at: [{}, {}] (Row, column)", westEntrance[0], westEntrance[1]);
-        logger.trace("East entrance at: [{}, {}] (Row, column)", eastEntrance[0], eastEntrance[1]);
+        logger.info("West entrance at: [{}, {}] (Row, column)", westEntrance[0], westEntrance[1]);
+        logger.info("East entrance at: [{}, {}] (Row, column)", eastEntrance[0], eastEntrance[1]);
     }
 
     public void printMaze() {
@@ -139,6 +139,7 @@ public class Maze {
         else if (facingDirection == 'W') {
             this.exit = westEntrance;
         }
+        logger.info("Set exit position to [{},{}]", this.exit[0], this.exit[1]);
     }
 
     public int[] getExit() {

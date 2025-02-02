@@ -1,6 +1,5 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-
 // we can use an enum for the direction, as they are a predefined set of values that don't change 
 public enum Direction {
     NORTH(0) {

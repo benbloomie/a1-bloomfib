@@ -61,7 +61,7 @@ public class RightHandAlgorithm implements MoveAlgorithm {
             int newColumn = currentColumn + this.positions[i][1];
 
             // checks if the new row and new column are valid before proceeding
-            if ((newColumn < 0 && newColumn >= maze.getLength()) && (newRow < 0 && newRow >= maze.getHeight())) {
+            if ((newColumn < 0 || newColumn >= maze.getLength()) || (newRow < 0 || newRow >= maze.getHeight())) {
                 logger.error("Position out of bounds.");
             }
             // if column and row values are valid, proceed forward 
