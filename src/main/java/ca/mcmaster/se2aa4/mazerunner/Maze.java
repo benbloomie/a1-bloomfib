@@ -7,14 +7,14 @@ import org.apache.logging.log4j.Logger;
 
 public class Maze {
     private static final Logger logger = LogManager.getLogger();  
-    // stores the information about the maze properties
+    // private attributes to store the information of the maze properties
     private char[][] maze;
     private int numColumns;
     private int numRows;
-    // stores the positions of the entrances
     private final int[] westEntrance = new int[2];
     private final int[] eastEntrance = new int[2];
     private int[] exit;
+    private int[] entrance;
 
     public Maze(String mazeFile) {
         this.maze = createMaze(mazeFile);
@@ -38,7 +38,7 @@ public class Maze {
     
             this.numColumns = linesInMaze.get(0).length();  // calculates the number of columns using the length of a line
             this.numRows = linesInMaze.size();  // calculates the number of rows using the number of elements in the array
-            char[][] tempMaze = new char[numRows][numColumns];
+            char[][] tempMaze = new char[numRows][numColumns];  
             String emptyLine = createEmptyLine();
     
             // iterates through each string in the ArrayList to create the 2D array of the maze
@@ -66,6 +66,7 @@ public class Maze {
     // method to create a String for a completely empty line
     public String createEmptyLine() {
         StringBuffer emptyLineString = new StringBuffer();
+        // reads over the number of columns, and adds an empty space for each occurence
         for (int i = 0; i < this.numColumns; i++) {
             emptyLineString.append(" ");
         }
@@ -73,7 +74,6 @@ public class Maze {
     }
 
     public void findEntrances() {
-        // NOTE: position [0][0] is top left corner of the maze
         logger.trace("**** Searching for entrances...");  
         for (int i = 0; i < this.numRows; i++) {
             // searches the left wall for an opening
@@ -82,7 +82,7 @@ public class Maze {
                 this.westEntrance[0] = i;
                 this.westEntrance[1] = 0;
             }
-            // searches the right wall for an opening, and assigns the same position
+            // searches the right wall for an opening, and assigns the position
             if (this.maze[i][numColumns - 1] == ' ') {
                 this.eastEntrance[0] = i;
                 this.eastEntrance[1] = numColumns - 1;
@@ -93,7 +93,6 @@ public class Maze {
     }
 
     public void printMaze() {
-        // iterates through each row and column of the maze, and prints out each item
         for (int i = 0; i < this.numRows; i++) {
             for (int j = 0; j < this.numColumns; j++) {
                 System.out.print(this.maze[i][j]);
@@ -118,17 +117,20 @@ public class Maze {
         return maze[row][column];
     }
 
-    public int[] getEntrance(char facingDirection) {
+    public void setEntrance(char facingDirection) {
         // determines what side of the maze the explorer starts on
         if (facingDirection == 'E') {
             setExit(facingDirection);  // sets the exit position while setting the entrance
-            return westEntrance;
+            this.entrance = westEntrance;
         }
         else if (facingDirection == 'W') {
             setExit(facingDirection);
-            return eastEntrance;
+            this.entrance = eastEntrance;
         }
-        return null;
+    }
+
+    public int[] getEntrance() {
+        return this.entrance;
     }
 
     public void setExit(char facingDirection) { 

@@ -16,16 +16,16 @@ public class DirectionAnalyzer {
         this.currentDirection = currentDirection.setInitialDirection(direction);  // updates starting direction to face the corrct way
     }
 
+    // method to move the explorer based on the provided move sequence
     public void moveExplorer(char move) {
-        // uses the enum method to update the facing direction when turning left
+        // uses the enum methods to update the facing direction when turning 
         if (move =='L') {
             currentDirection = currentDirection.turnLeft();  
         }
-        // uses the enum method to update the facing direction when turning right
         else if (move == 'R') {
             currentDirection = currentDirection.turnRight();
         }
-        // moves the explorers position by calling the enum method
+        // moves the explorer forward by calling the enum method
         else if (move == 'F') {
             currentDirection.makeMove(position, maze);
         }

@@ -8,10 +8,9 @@ public class PathFormatter {
     private String canonicalPath;
     private String factorizedPath;
 
-    // method to check what format the user used when entering a path move sequence
+    // method to ensure the string is analyzed in its canonical form
     public void setCanonicalPath(String pathString) {
         this.canonicalPath = pathString;
-
         // reads through the move sequence to check for a number --> determine if it is in factorized form
         for (int i = 0; i < pathString.length(); i++) {
             if (Character.isDigit(pathString.charAt(i))) {
@@ -21,7 +20,6 @@ public class PathFormatter {
         }
     }
 
-    // getter method to retreive the canonical path
     public String getCanonicalPath() {
         return this.canonicalPath;
     }
@@ -62,7 +60,6 @@ public class PathFormatter {
         return canonicalSequence.toString();
     }
 
-    // method to convert from canonical to factorized path for output
     public void setFactorizedPath(String canonicalPath) {
         StringBuffer factorizedPath = new StringBuffer();
 

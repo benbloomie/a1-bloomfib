@@ -56,12 +56,10 @@ public enum Direction {
         this.directionValue = directionValue;  // assigns a field to each enum --> int representation of the direction
     }
 
-    // getter method to retrieve the direction the explorer faces as an int
     public int getDirectionValue() {
         return this.directionValue;
     }
 
-    // getter method to retreive the array of directions
     public Direction[] getDirections() {
         return values();
     }
@@ -82,14 +80,14 @@ public enum Direction {
     public Direction turnLeft() {
         int directionValue = getDirectionValue();
         Direction[] directionArray = getDirections();
-        return directionArray[(directionValue + 3) % 4];  // returns the new direction using the position in the Directions[] array
+        return directionArray[(directionValue + 3) % 4];  // returns the new direction using the position in the Direction[] array
     }  
 
-    // method that uses modular arithmetic to calculate the direction the explorer faces after turning left
+    // method that uses modular arithmetic to calculate the direction the explorer faces after turning right
     public Direction turnRight() {
         int directionValue = getDirectionValue();
         Direction[] directionArray = getDirections();
-        return directionArray[(directionValue + 1) % 4];  // returns the new direction using the position in the Directions[] array
+        return directionArray[(directionValue + 1) % 4];  
     }  
 
     public abstract void makeMove(int[] currentPosition, Maze maze);  // abstract method to move the explorer based on the current direction it faces

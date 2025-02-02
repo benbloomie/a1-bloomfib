@@ -80,8 +80,8 @@ public class RightHandAlgorithm implements MoveAlgorithm {
         int currentRow = directionAnalyzer.getPosition()[0];
         int currentColumn = directionAnalyzer.getPosition()[1];
         // calculates which way the explorer can move based on the direction it faces
-        int rowMovement = (facingDirection + 2) % 2;
-        int columnMovement = (facingDirection + 1) % 2;
+        int rowMovement = (facingDirection + 2) % 2;  // facing north and south means its row can move
+        int columnMovement = (facingDirection + 1) % 2;  // facing east and west means its column can move
 
         // checks the right tile --> if the explorer is facing north or east, add the values OR if the explorer is facing west or south, subtract the values
         if ((facingDirection < 2 && maze.getTile(currentRow + rowMovement, currentColumn + columnMovement) == ' ') 

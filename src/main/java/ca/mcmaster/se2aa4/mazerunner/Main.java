@@ -8,16 +8,18 @@ public class Main {
     private static final Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) {
-        Options options = setOptions();  // creates the Options object to define command-line options
-        CommandLineParser parser = new DefaultParser();  // creates a parser for reading command-line arguments
+        Options options = setOptions();  
+        CommandLineParser parser = new DefaultParser();  
 
         try {
             CommandLine cmd = parser.parse(options, args);  // parses the command-line arguments
-            String mazeFile = cmd.getOptionValue("i");  // assigns the maze text file to mazeFile
+            // assigns the associate argument with the flag to a String
+            String mazeFile = cmd.getOptionValue("i");  
             String moveSequence = cmd.getOptionValue("p");
 
             Maze maze = new Maze(mazeFile);
-            DirectionAnalyzer directionAnalyzer = new DirectionAnalyzer('E', maze, maze.getEntrance('E'));
+            maze.setEntrance('E');
+            DirectionAnalyzer directionAnalyzer = new DirectionAnalyzer('E', maze, maze.getEntrance());
             PathFormatter formatter = new PathFormatter();
             logger.info("** Starting Maze Runner");
 
@@ -25,7 +27,7 @@ public class Main {
             if (moveSequence != null) {
                 logger.info("**** Verifying path");
                 formatter.setCanonicalPath(moveSequence);
-                moveSequence = formatter.getCanonicalPath();
+                moveSequence = formatter.getCanonicalPath();  // converts the moveSequence to its canonical form before proceeding
                 MazeExplorer verifier = new PathVerifier(maze, directionAnalyzer, moveSequence);
                 verifier.exploreMaze();
                 String result = verifier.getPathResult();
@@ -40,7 +42,7 @@ public class Main {
                 finder.exploreMaze();
                 String result = finder.getPathResult();
                 formatter.setFactorizedPath(result);
-                String factorizedPathSequence = formatter.getFactorizedPath();
+                String factorizedPathSequence = formatter.getFactorizedPath();  // converts the result to its factoirzed form
                 System.out.println(factorizedPathSequence);
             }
             logger.info("** End of MazeRunner");

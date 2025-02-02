@@ -49,7 +49,6 @@ public class PathVerifier implements MazeExplorer {
         return "incorrect path";
     }
 
-    // setter method to change the move sequence if the user wants to verify a new path
     public void setNewPath(String moveSequence) {
         this.moveSequence = moveSequence;
     }
