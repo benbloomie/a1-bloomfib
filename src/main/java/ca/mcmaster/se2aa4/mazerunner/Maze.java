@@ -21,7 +21,6 @@ public class Maze {
         if (this.maze == null) {
             throw new IllegalArgumentException("Could not read maze file. Missing -i flag, or bad file path.");
         }
-        findEntrances();
     }
 
     public char[][] createMaze(String mazeFile) {
@@ -127,6 +126,8 @@ public class Maze {
             setExit(facingDirection);
             this.entrance = eastEntrance;
         }
+        logger.info("Set entrance position to [{},{}]", this.entrance[0], this.entrance[1]);
+
     }
 
     public int[] getEntrance() {
@@ -134,6 +135,7 @@ public class Maze {
     }
 
     public void setExit(char facingDirection) { 
+        findEntrances();
         // determines the exit position based on what the starting position was 
         if (facingDirection == 'E') {
             this.exit = eastEntrance;

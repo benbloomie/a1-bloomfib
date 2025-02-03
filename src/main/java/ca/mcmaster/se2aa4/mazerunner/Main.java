@@ -18,8 +18,6 @@ public class Main {
             String moveSequence = cmd.getOptionValue("p");
 
             Maze maze = new Maze(mazeFile);
-            maze.setEntrance('E');
-            DirectionAnalyzer directionAnalyzer = new DirectionAnalyzer('E', maze, maze.getEntrance());
             PathFormatter formatter = new PathFormatter();
             logger.info("** Starting Maze Runner");
 
@@ -28,14 +26,17 @@ public class Main {
                 logger.info("**** Verifying path");
                 formatter.setCanonicalPath(moveSequence);
                 moveSequence = formatter.getCanonicalPath();  // converts the moveSequence to its canonical form before proceeding
-                MazeExplorer verifier = new PathVerifier(maze, directionAnalyzer, moveSequence);
-                verifier.exploreMaze();
-                String result = verifier.getPathResult();
-                System.out.println(result);
+
+                String result1 = verifyPath(maze, 'E', moveSequence);
+                String result2 = verifyPath(maze, 'W', moveSequence);
+                System.out.println(getResult(result1, result2));
             }
 
             // if no -p flag is present, find the exit path sequence
             else {
+                // assume we start at the east entrance
+                maze.setEntrance('E');
+                DirectionAnalyzer directionAnalyzer = new DirectionAnalyzer('E', maze, maze.getEntrance());
                 logger.info("**** Computing path");
                 logger.warn("PATH NOT COMPUTED");
                 MazeExplorer finder = new PathFinder(maze, directionAnalyzer, new RightHandAlgorithm());
@@ -71,5 +72,24 @@ public class Main {
                 .desc(message)
                 .build();
         return cmdFlag;
+    }
+
+    private static String getResult(String result1, String result2) {
+        // prints correct path if one of them was determined to be true
+        if (result2.equalsIgnoreCase("correct path") || result1.equalsIgnoreCase("correct path")) {
+            return "correct path";
+        }
+        else {
+            return "incorrect path";
+        }
+    }
+
+    private static String verifyPath(Maze maze, char entrance, String moveSequence) {
+        // verifies the path based on the given entrance
+        maze.setEntrance(entrance);
+        DirectionAnalyzer directionAnalyzer = new DirectionAnalyzer(entrance, maze, maze.getEntrance());
+        MazeExplorer verifier = new PathVerifier(maze, directionAnalyzer, moveSequence);
+        verifier.exploreMaze();
+        return verifier.getPathResult();
     }
 }
