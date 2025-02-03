@@ -19,7 +19,7 @@ public class Maze {
     public Maze(String mazeFile) {
         this.maze = createMaze(mazeFile);
         if (this.maze == null) {
-            throw new IllegalArgumentException("Could not create maze.");
+            throw new IllegalArgumentException("Could not read maze file. Missing -i flag, or bad file path.");
         }
         findEntrances();
     }

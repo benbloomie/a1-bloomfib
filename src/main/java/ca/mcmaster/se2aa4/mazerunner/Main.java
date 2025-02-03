@@ -48,7 +48,7 @@ public class Main {
             logger.info("** End of MazeRunner");
 
         } catch (Exception e) {
-            logger.error("/!\\ An error has occured: {} /!\\", e.getMessage());
+            System.err.println("/!\\ An error has occured: " + e.getMessage() + " /!\\");
         }
     }
 
