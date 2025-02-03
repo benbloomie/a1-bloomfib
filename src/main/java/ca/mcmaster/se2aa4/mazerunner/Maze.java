@@ -18,8 +18,9 @@ public class Maze {
 
     public Maze(String mazeFile) {
         this.maze = createMaze(mazeFile);
+        // throw an exception when reading from a file that does not exist
         if (this.maze == null) {
-            throw new IllegalArgumentException("Could not read maze file. Missing -i flag, or bad file path.");
+            throw new IllegalArgumentException("Could not read maze file. Missing -i flag, or bad file path.");  
         }
     }
 
@@ -62,18 +63,18 @@ public class Maze {
         return null;  // returns null if an error occurs while reading the maze
     }
 
-    // method to create a String for a completely empty line
     public String createEmptyLine() {
         StringBuffer emptyLineString = new StringBuffer();
         // reads over the number of columns, and adds an empty space for each occurence
         for (int i = 0; i < this.numColumns; i++) {
             emptyLineString.append(" ");
         }
-        return emptyLineString.toString();
+        return emptyLineString.toString();  // returns a String for that represents a completely empty line
     }
 
     public void findEntrances() {
         logger.trace("**** Searching for entrances...");  
+        // loops through each row of the maze to check for an open position
         for (int i = 0; i < this.numRows; i++) {
             // searches the left wall for an opening
             if (this.maze[i][0] == ' ') {
@@ -135,7 +136,7 @@ public class Maze {
     }
 
     public void setExit(char facingDirection) { 
-        findEntrances();
+        findEntrances();  // finds the maze entrances before proceeding
         // determines the exit position based on what the starting position was 
         if (facingDirection == 'E') {
             this.exit = eastEntrance;

@@ -14,6 +14,7 @@ public class PathFinder implements MazeExplorer {
 
     @Override 
     public void exploreMaze() {
+        // calls the MoveAlgorithm defined methods to find the path
         algorithm.findPath(maze, directionAnalyzer);
         this.pathResult = algorithm.getAlgorithmPath();
     }

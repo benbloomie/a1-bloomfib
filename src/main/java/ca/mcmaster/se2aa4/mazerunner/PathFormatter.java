@@ -8,9 +8,8 @@ public class PathFormatter {
     private String canonicalPath;
     private String factorizedPath;
 
-    // method to ensure the string is analyzed in its canonical form
     public void setCanonicalPath(String pathString) {
-        this.canonicalPath = pathString;
+        this.canonicalPath = pathString; // initially sets the canonical paht to what was received from user input
         // reads through the move sequence to check for a number --> determine if it is in factorized form
         for (int i = 0; i < pathString.length(); i++) {
             if (Character.isDigit(pathString.charAt(i))) {
@@ -82,7 +81,7 @@ public class PathFormatter {
             else {
                 factorizedPath.append(canonicalPath.charAt(i));
             }
-            logger.info("Appending {}{}", movementCount, canonicalPath.charAt(i));
+            logger.trace("Appending {}{}", movementCount, canonicalPath.charAt(i));
         }
         this.factorizedPath = factorizedPath.toString();
     }

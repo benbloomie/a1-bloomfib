@@ -25,7 +25,7 @@ public class DirectionAnalyzer {
         else if (move == 'R') {
             currentDirection = currentDirection.turnRight();
         }
-        // moves the explorer forward by calling the enum method
+        // moves the explorer forward by calling the enum method move explorer
         else if (move == 'F') {
             currentDirection.makeMove(position, maze);
         }

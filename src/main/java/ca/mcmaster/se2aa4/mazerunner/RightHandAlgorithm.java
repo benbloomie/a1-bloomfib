@@ -14,13 +14,14 @@ public class RightHandAlgorithm implements MoveAlgorithm {
     public void findPath(Maze maze, DirectionAnalyzer directionAnalyzer) {
         mazeExit = maze.getExit();
 
+        // loops until the explorer has reached the exit
         while (!isExplorerAtExit(directionAnalyzer.getPosition())) {
             boolean moved = false;
 
             // Case I: if an empty space is present in the direction that the explorer is facing, move the explorer forward
             if (isForwardFree(directionAnalyzer, maze)) {
                 directionAnalyzer.moveExplorer('F');
-                logger.info("Moving F to new position: [{}, {}]", directionAnalyzer.getPosition()[0], directionAnalyzer.getPosition()[1]);
+                logger.trace("Moving F to new position: [{}, {}]", directionAnalyzer.getPosition()[0], directionAnalyzer.getPosition()[1]);
                 pathSequence.append('F');
                 moved = true;
             } 
@@ -29,14 +30,14 @@ public class RightHandAlgorithm implements MoveAlgorithm {
             if (isRightFree(directionAnalyzer, maze)) {
                 directionAnalyzer.moveExplorer('R');
                 pathSequence.append("R");
-                logger.info("Moving R to new face: {}", directionAnalyzer.getFacingDirection());       
+                logger.trace("Moving R to new face: {}", directionAnalyzer.getFacingDirection());       
                 moved = true; 
             }
 
             // Case III: the explorer is currently facing the wall
             if (!moved) {
                 directionAnalyzer.moveExplorer('L');
-                logger.info("Moving L to new face: {}", directionAnalyzer.getFacingDirection());
+                logger.trace("Moving L to new face: {}", directionAnalyzer.getFacingDirection());
                 pathSequence.append('L');
             }
         }
@@ -46,7 +47,7 @@ public class RightHandAlgorithm implements MoveAlgorithm {
     private boolean isExplorerAtExit(int[] currentPosition) {
         // initializes arrays for the exit position and the position that the explorer ends at
         logger.trace("Exit position: {} ", this.mazeExit);
-        logger.info("Current position: {} ", currentPosition);
+        logger.trace("Current position: {} ", currentPosition);
         // compares row and column positions after all path moves have been made --> boolean results determines if explorer escaped
         return (currentPosition[0] == this.mazeExit[0] && currentPosition[1] == this.mazeExit[1]);
     }
@@ -76,7 +77,7 @@ public class RightHandAlgorithm implements MoveAlgorithm {
 
     private boolean isRightFree(DirectionAnalyzer directionAnalyzer, Maze maze) {
         int facingDirection = directionAnalyzer.getFacingDirectionValue();
-        logger.info("Facing direction " + facingDirection);
+        logger.trace("Facing direction " + facingDirection);
         int currentRow = directionAnalyzer.getPosition()[0];
         int currentColumn = directionAnalyzer.getPosition()[1];
         // calculates which way the explorer can move based on the direction it faces

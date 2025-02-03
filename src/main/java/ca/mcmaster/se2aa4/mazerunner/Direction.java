@@ -76,15 +76,15 @@ public enum Direction {
         throw new IllegalArgumentException("Cannot initialize starting direction to be " + startingDirection);
     }
 
-    // method that uses modular arithmetic to calculate the direction the explorer faces after turning left
     public Direction turnLeft() {
+        // uses modular arithmetic to calculate the direction the explorer faces after turning left
         int directionValue = getDirectionValue();
         Direction[] directionArray = getDirections();
-        return directionArray[(directionValue + 3) % 4];  // returns the new direction using the position in the Direction[] array
+        return directionArray[(directionValue + 3) % 4];  // returns the new direction using the corresponding position in the Direction[] array
     }  
 
-    // method that uses modular arithmetic to calculate the direction the explorer faces after turning right
     public Direction turnRight() {
+        // uses modular arithmetic to calculate the direction the explorer faces after turning right
         int directionValue = getDirectionValue();
         Direction[] directionArray = getDirections();
         return directionArray[(directionValue + 1) % 4];  
