@@ -36,6 +36,13 @@
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
     </dependency>
+    <!-- Unit testing with jUnit 5-->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.10.1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -78,13 +85,6 @@
         <version>2.22.1</version>
         <scope>import</scope>
         <type>pom</type>
-      </dependency>
-      <!-- Unit testing with jUnit 5-->
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-engine</artifactId>
-        <version>5.10.1</version>
-        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
