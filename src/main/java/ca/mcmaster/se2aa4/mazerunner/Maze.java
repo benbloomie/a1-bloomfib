@@ -11,8 +11,6 @@ public class Maze {
     private char[][] maze;
     private int numColumns;
     private int numRows;
-    private final int[] westEntrance = new int[2];
-    private final int[] eastEntrance = new int[2];
     private int[] exit;
     private int[] entrance;
 
@@ -72,24 +70,28 @@ public class Maze {
         return emptyLineString.toString();  // returns a String for that represents a completely empty line
     }
 
-    public void findEntrances() {
-        logger.trace("**** Searching for entrances...");  
-        // loops through each row of the maze to check for an open position
+    private int[] findWestOpening() {
+        logger.trace("**** Searching west entrance...");  
         for (int i = 0; i < this.numRows; i++) {
-            // searches the left wall for an opening
+            // searches the left wall for an opening, and returns the position of the open tile
             if (this.maze[i][0] == ' ') {
-                // assigns first position the row, and the second position the column
-                this.westEntrance[0] = i;
-                this.westEntrance[1] = 0;
-            }
-            // searches the right wall for an opening, and assigns the position
-            if (this.maze[i][numColumns - 1] == ' ') {
-                this.eastEntrance[0] = i;
-                this.eastEntrance[1] = numColumns - 1;
+                logger.info("West opening at: [{}, {}] (Row, column)", i, 0);
+                return new int[]{i, 0};
             }
         }
-        logger.info("West entrance at: [{}, {}] (Row, column)", westEntrance[0], westEntrance[1]);
-        logger.info("East entrance at: [{}, {}] (Row, column)", eastEntrance[0], eastEntrance[1]);
+        throw new IllegalArgumentException("Unsolvable maze. Contains no east opening");  
+    }
+
+    private int[] findEastOpening() {
+        logger.trace("**** Searching for east entrance...");  
+        for (int i = 0; i < this.numRows; i++) {
+            // searches the right wall for an opening, and returns the position of the open tile
+            if (this.maze[i][numColumns - 1] == ' ') {
+                logger.info("East opening at: [{}, {}] (Row, column)", i, numColumns - 1);
+                return new int[]{i, numColumns - 1};
+            }
+        }
+        throw new IllegalArgumentException("Unsolvable maze. Contains no west opening");  
     }
 
     public void printMaze() {
@@ -117,34 +119,22 @@ public class Maze {
         return maze[row][column];
     }
 
-    public void setEntrance(char facingDirection) {
+    public void setMazeOpenings(char facingDirection) {
         // determines what side of the maze the explorer starts on
         if (facingDirection == 'E') {
-            setExit(facingDirection);  // sets the exit position while setting the entrance
-            this.entrance = westEntrance;
+            this.entrance = findWestOpening();
+            this.exit = findEastOpening();
         }
         else if (facingDirection == 'W') {
-            setExit(facingDirection);
-            this.entrance = eastEntrance;
+            this.entrance = findEastOpening();
+            this.exit = findWestOpening();
         }
         logger.info("Set entrance position to [{},{}]", this.entrance[0], this.entrance[1]);
-
+        logger.info("Set exit position to [{},{}]", this.exit[0], this.exit[1]);
     }
 
     public int[] getEntrance() {
         return this.entrance;
-    }
-
-    public void setExit(char facingDirection) { 
-        findEntrances();  // finds the maze entrances before proceeding
-        // determines the exit position based on what the starting position was 
-        if (facingDirection == 'E') {
-            this.exit = eastEntrance;
-        }
-        else if (facingDirection == 'W') {
-            this.exit = westEntrance;
-        }
-        logger.info("Set exit position to [{},{}]", this.exit[0], this.exit[1]);
     }
 
     public int[] getExit() {

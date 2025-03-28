@@ -34,7 +34,7 @@ public class Main {
 
             // if no -p flag is present, find the exit path sequence
             else {
-                maze.setEntrance('E');  // assume we start at the east entrance
+                maze.setMazeOpenings('E');  // assume we start at the east entrance
                 DirectionAnalyzer directionAnalyzer = new DirectionAnalyzer('E', maze, maze.getEntrance());
                 logger.info("**** Computing path");
                 logger.warn("PATH NOT COMPUTED");
@@ -86,7 +86,7 @@ public class Main {
 
     private static String verifyPath(Maze maze, char entrance, String moveSequence) {
         // verifies the path sequence based on the given entrance
-        maze.setEntrance(entrance);
+        maze.setMazeOpenings(entrance);
         DirectionAnalyzer directionAnalyzer = new DirectionAnalyzer(entrance, maze, maze.getEntrance());
         MazeExplorer verifier = new PathVerifier(maze, directionAnalyzer, moveSequence);
         verifier.exploreMaze();

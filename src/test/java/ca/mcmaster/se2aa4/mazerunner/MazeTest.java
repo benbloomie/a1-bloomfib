@@ -5,8 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MazeTest {
-
-    // using small.maz.txt for Maze testing
     private static final String MAZE = "./examples/small.maz.txt";
     private Maze maze;
 
@@ -34,36 +32,27 @@ public class MazeTest {
 
     @Test
     void testMazeEntranceFacingEast() {
-        maze.setEntrance('E'); 
-        maze.findEntrances(); 
-        int[] entrance = maze.getEntrance();
-        assertArrayEquals(new int[]{8, 0}, entrance);
+        maze.setMazeOpenings('E'); 
+        assertArrayEquals(new int[]{8, 0}, maze.getEntrance());
     }
 
     @Test
     void testMazeEntranceFacingWest() {
-        maze.setEntrance('W'); 
-        maze.findEntrances(); 
-        int[] entrance = maze.getEntrance();
-        assertArrayEquals(new int[]{5, 10}, entrance);
+        maze.setMazeOpenings('W'); 
+        assertArrayEquals(new int[]{5, 10}, maze.getEntrance());
     }
 
     @Test
     void testMazeExitFacingEast() {
-        maze.setEntrance('E'); 
-        maze.findEntrances(); 
-        int[] exit = maze.getExit();
-        assertArrayEquals(new int[]{5, 10}, exit);
+        maze.setMazeOpenings('E'); 
+        assertArrayEquals(new int[]{5, 10}, maze.getExit());
     }
      
     @Test
     void testMazeExitFacingWest() {
-        maze.setEntrance('W'); 
-        maze.findEntrances(); 
-        int[] exit = maze.getExit();
-        assertArrayEquals(new int[]{8, 0}, exit);
+        maze.setMazeOpenings('W'); 
+        assertArrayEquals(new int[]{8, 0}, maze.getExit());
     }
-
 
     @Test
     void testEmptyTileRetrieval() {
@@ -76,5 +65,4 @@ public class MazeTest {
         char tile = maze.getTile(0, 0);
         assertEquals('#', tile);
     }
-    
 }
