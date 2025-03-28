@@ -38,7 +38,7 @@ public class DirectionAnalyzer {
 
     // getter method to retrieve the value of the facing direction
     public int getFacingDirectionValue() {
-        return currentDirection.getDirectionValue();
+        return currentDirection.ordinal();
     }
 
     // getter method to access the current position of the traveler

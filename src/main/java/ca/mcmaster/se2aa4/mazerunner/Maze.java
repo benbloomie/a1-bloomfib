@@ -25,32 +25,13 @@ public class Maze {
     public char[][] createMaze(String mazeFile) {
         logger.info("**** Reading the maze from file: {}", mazeFile);
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(mazeFile));
-            ArrayList<String> linesInMaze = new ArrayList<>();  // stores each line of the text file in an ArrayList
-            String mazeLine;
-    
-            // reads in each line of the maze as a string, and adds it to the ArrayList
-            while ((mazeLine = reader.readLine()) != null) {
-                linesInMaze.add(mazeLine);
-            }
-    
+            List<String> linesInMaze = readMazeFile(mazeFile);  // stores each line of the text file in an ArrayList    
             this.numColumns = linesInMaze.get(0).length();  // calculates the number of columns using the length of a line
             this.numRows = linesInMaze.size();  // calculates the number of rows using the number of elements in the array
-            char[][] tempMaze = new char[numRows][numColumns];  
-            String emptyLine = createEmptyLine();
-    
-            // iterates through each string in the ArrayList to create the 2D array of the maze
-            for (int i = 0; i < this.numRows; i++) {
-                String line = linesInMaze.get(i);
-                if (line.isEmpty()) {
-                    line = emptyLine;  // replace empty lines with the empty line string
-                }
-                logger.trace("Adding string: {}", line);
-                for (int j = 0; j < this.numColumns; j++) {
-                    tempMaze[i][j] = line.charAt(j); 
-                }
-            }
-            reader.close();
+            
+            char[][] tempMaze = new char[numRows][numColumns];      
+            populateMaze(linesInMaze, tempMaze);
+
             return tempMaze;
 
         } catch(IOException e) {
@@ -61,7 +42,36 @@ public class Maze {
         return null;  // returns null if an error occurs while reading the maze
     }
 
-    public String createEmptyLine() {
+    private List<String> readMazeFile(String mazeFile) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(mazeFile));
+        List<String> linesInMaze = new ArrayList<>();
+        String mazeLine;
+    
+        // reads in each line of the maze as a string, and adds it to the ArrayList
+        while ((mazeLine = reader.readLine()) != null) {
+            linesInMaze.add(mazeLine);
+        }
+        reader.close();
+        return linesInMaze;
+    }
+
+    private void populateMaze(List<String> linesInMaze, char[][] tempMaze) {
+        // iterates through each string in the ArrayList to create the 2D array of the maze
+        for (int i = 0; i < this.numRows; i++) {
+            String line = linesInMaze.get(i);
+            if (line.isEmpty()) {
+                line = createEmptyLine();  // replace empty lines with the empty line string
+            }
+            logger.trace("Adding string: {}", line);
+
+            // populates the 2D array with the characters
+            for (int j = 0; j < this.numColumns; j++) {
+                tempMaze[i][j] = line.charAt(j); 
+            }
+        }
+    }
+
+    private String createEmptyLine() {
         StringBuffer emptyLineString = new StringBuffer();
         // reads over the number of columns, and adds an empty space for each occurence
         for (int i = 0; i < this.numColumns; i++) {
