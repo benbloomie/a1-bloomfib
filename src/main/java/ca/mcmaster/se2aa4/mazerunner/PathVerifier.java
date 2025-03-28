@@ -21,12 +21,15 @@ public class PathVerifier implements MazeExplorer {
         for (int i = 0; i < moveSequence.length(); i++) {
             char currentMove = moveSequence.charAt(i);
             // checks if the direction is accepted before processing the move
-            if (currentMove != 'F' && currentMove != 'R' && currentMove != 'L') {
+            if (currentMove == 'F' || currentMove == 'R' || currentMove == 'L') {
+                directionAnalyzer.moveExplorer(currentMove);  // passes through each move to update the position
+                logger.trace("Move {}: {} in direction {}", i + 1, currentMove, directionAnalyzer.getFacingDirection()); // log each move
+            }
+            // if the current character is a space, do nothing
+            else if (currentMove != ' ') {
                 logger.error("Error: Cannot make the move {}", currentMove);
                 throw new IllegalArgumentException("Invalid move in path: " + currentMove);
             }
-            directionAnalyzer.moveExplorer(currentMove);  // passes through each move to update the position
-            logger.trace("Move {}: {} in direction {}", i + 1, currentMove, directionAnalyzer.getFacingDirection()); // log each move
         }
     }
     
