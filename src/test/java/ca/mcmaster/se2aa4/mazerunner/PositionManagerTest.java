@@ -13,7 +13,7 @@ public class PositionManagerTest {
     @BeforeEach
     void createMaze() {
         maze = new Maze(MAZE);
-        positionManager = new PositionManager(maze, new int[]{3, 3});  // starts explorer at an open position
+        positionManager = new PositionManager(maze, new int[]{3, 3}, new ExplorerMovement());  // starts explorer at an open position
     }
 
     @Test

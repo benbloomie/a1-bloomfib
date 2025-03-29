@@ -8,12 +8,14 @@ public class PathVerifier implements MazeExplorer {
     private Maze maze;
     private PositionManager positionManager;
     private DirectionManager directionManager;
+    private ExplorerMovement explorerMovement;
     private String moveSequence;
 
     public PathVerifier(char startingDirection, Maze maze, String moveSequence) {
         this.maze = maze;
-        this.positionManager = new PositionManager(maze, maze.getEntrance());
-        this.directionManager = new DirectionManager(startingDirection);
+        this.explorerMovement = new ExplorerMovement();
+        this.positionManager = new PositionManager(maze, maze.getEntrance(), explorerMovement);
+        this.directionManager = new DirectionManager(startingDirection, explorerMovement);
         this.moveSequence = moveSequence;
     }
 
@@ -23,12 +25,8 @@ public class PathVerifier implements MazeExplorer {
         for (int i = 0; i < moveSequence.length(); i++) {
             char currentMove = moveSequence.charAt(i);
             // checks if the direction is accepted before processing the move
-            if (currentMove == 'R' || currentMove == 'L') {
-                directionManager.turnExplorer(currentMove);  // passes through each move to update the position
-                logger.trace("Move {}: {} in direction {}", i + 1, currentMove, directionManager.getFacingDirection()); // log each move
-            }
-            else if (currentMove == 'F') {
-                positionManager.moveExplorer(directionManager.getCurrentDirection());
+            if (currentMove == 'R' || currentMove == 'L' || currentMove == 'F') {
+                explorerMovement.setState(currentMove, directionManager.getCurrentDirection());
             }
             // if the current character is a space, do nothing
             else if (currentMove != ' ') {

@@ -11,7 +11,7 @@ public class TestAllMazes {
         Maze maze = new Maze("./examples/direct.maz.txt");
         maze.setMazeOpenings('E');  // assume we start at the east entrance
         PathFormatter pathFormatter = new PathFormatter();
-        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm(maze));
+        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm('E', maze));
         finder.exploreMaze();
         String result = finder.getPathResult();  
         pathFormatter.setFactorizedPath(result);
@@ -30,7 +30,7 @@ public class TestAllMazes {
     void verifyGiantMaze() {
         Maze maze = new Maze("./examples/giant.maz.txt");
         maze.setMazeOpenings('E');  // assume we start at the east entrance
-        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm(maze));
+        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm('E', maze));
         finder.exploreMaze();
         String result = finder.getPathResult();  
 
@@ -46,7 +46,7 @@ public class TestAllMazes {
     void verifyHugeMaze() {
         Maze maze = new Maze("./examples/huge.maz.txt");
         maze.setMazeOpenings('E');  // assume we start at the east entrance
-        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm(maze));
+        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm('E', maze));
         finder.exploreMaze();
         String result = finder.getPathResult();  
 
@@ -62,7 +62,7 @@ public class TestAllMazes {
     void verifyLargeMaze() {
         Maze maze = new Maze("./examples/large.maz.txt");
         maze.setMazeOpenings('E');  // assume we start at the east entrance
-        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm(maze));
+        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm('E', maze));
         finder.exploreMaze();
         String result = finder.getPathResult();  
 
@@ -78,7 +78,7 @@ public class TestAllMazes {
     void verifyMediumMaze() {
         Maze maze = new Maze("./examples/medium.maz.txt");
         maze.setMazeOpenings('E');  // assume we start at the east entrance        
-        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm(maze));
+        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm('E', maze));
         finder.exploreMaze();
         String result = finder.getPathResult();  
 
@@ -94,7 +94,7 @@ public class TestAllMazes {
     void verifyRectangleMaze() {
         Maze maze = new Maze("./examples/rectangle.maz.txt");
         maze.setMazeOpenings('E');  // assume we start at the east entrance
-        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm(maze));
+        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm('E', maze));
         finder.exploreMaze();
         String result = finder.getPathResult();  
 
@@ -110,7 +110,7 @@ public class TestAllMazes {
     void verifyRegularMaze() {
         Maze maze = new Maze("./examples/regular.maz.txt");
         maze.setMazeOpenings('E');  // assume we start at the east entrance
-        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm(maze));
+        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm('E', maze));
         finder.exploreMaze();
         String result = finder.getPathResult();  
 
@@ -127,7 +127,7 @@ public class TestAllMazes {
         Maze maze = new Maze("./examples/small.maz.txt");
         maze.setMazeOpenings('E');  // assume we start at the east entrance
         PathFormatter pathFormatter = new PathFormatter();
-        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm(maze));
+        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm('E', maze));
         finder.exploreMaze();
         String result = finder.getPathResult();  
         pathFormatter.setFactorizedPath(result);
@@ -147,7 +147,7 @@ public class TestAllMazes {
         Maze maze = new Maze("./examples/straight.maz.txt");
         maze.setMazeOpenings('E');  // assume we start at the east entrance
         PathFormatter pathFormatter = new PathFormatter();
-        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm(maze));
+        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm('E', maze));
         finder.exploreMaze();
         String result = finder.getPathResult();  
         pathFormatter.setFactorizedPath(result);
@@ -168,7 +168,7 @@ public class TestAllMazes {
         Maze maze = new Maze("./examples/tiny.maz.txt");
         maze.setMazeOpenings('E');  // assume we start at the east entrance
         PathFormatter pathFormatter = new PathFormatter();
-        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm(maze));
+        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm('E', maze));
         finder.exploreMaze();
         String result = finder.getPathResult();  
         pathFormatter.setFactorizedPath(result);

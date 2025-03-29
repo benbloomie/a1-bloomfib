@@ -9,7 +9,7 @@ public class DirectionManagerTest {
 
     @BeforeEach
     void createMaze() {
-        directionManager = new DirectionManager('E');
+        directionManager = new DirectionManager('E', new ExplorerMovement());
     }
 
     @Test

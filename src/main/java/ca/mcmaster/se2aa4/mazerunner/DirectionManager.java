@@ -1,10 +1,16 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-public class DirectionManager {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public class DirectionManager extends MoveObserver {
+    private static final Logger logger = LogManager.getLogger();
     private Direction currentDirection;
 
-    public DirectionManager(char startingDirection) {
+    public DirectionManager(char startingDirection, Subject subject) {
         setInitialDirection(startingDirection);
+        this.subject = subject;
+        subject.attach(this);
     }
 
     public void setInitialDirection(char startingDirection) {
@@ -25,9 +31,11 @@ public class DirectionManager {
         // uses the enum methods to update the facing direction when turning 
         if (move =='L') {
             currentDirection = currentDirection.turnLeft();  
+            logger.trace("Moving L to new face: {}", getFacingDirection());
         }
         else if (move == 'R') {
             currentDirection = currentDirection.turnRight();
+            logger.trace("Moving R to new face: {}", getFacingDirection());
         }
     }
 
@@ -43,5 +51,14 @@ public class DirectionManager {
     // getter method to retrieve the value of the facing direction
     public int getFacingDirectionValue() {
         return currentDirection.ordinal();
+    }
+
+    @Override
+    public void update() {
+        char move = this.subject.getMove();
+        if (move == 'L' || move == 'R') {
+            turnExplorer(move);
+            logger.trace("Moving L to new face: {}", getFacingDirection());
+        }
     }
 }

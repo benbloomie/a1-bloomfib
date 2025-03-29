@@ -6,53 +6,45 @@ import org.apache.logging.log4j.Logger;
 public class RightHandAlgorithm implements MoveAlgorithm {
     private static final Logger logger = LogManager.getLogger();
     private Maze maze;
-    private String rightHandPath;
     private int[][] positions = {{-1,0}, {0,1}, {1,0}, {0,-1}};  // move positions to represent each direction
     private PositionManager positionManager;
     private DirectionManager directionManager;
+    private ExplorerMovement explorerMovement;
+    private PathManager pathManager;
 
-    public RightHandAlgorithm(Maze maze) {
+    public RightHandAlgorithm(char startingDirection, Maze maze) {
         this.maze = maze;
-    }
-
-    @Override
-    public void setManagers(PositionManager positionManager, DirectionManager directionManager) {
-        this.positionManager = positionManager;
-        this.directionManager = directionManager;
+        this.explorerMovement = new ExplorerMovement();
+        this.positionManager = new PositionManager(maze, maze.getEntrance(), explorerMovement);
+        this.directionManager = new DirectionManager(startingDirection, explorerMovement);
+        this.pathManager = new PathManager(explorerMovement);
     }
 
     @Override
     public void findPath() {
-        StringBuffer pathSequence = new StringBuffer();
-
         // loops until the explorer has reached the exit
         while (!isExplorerAtExit()) {
             boolean moved = false;
 
             // Case I: if an empty space is present in the direction that the explorer is facing, move the explorer forward
             if (isForwardFree()) {
-                positionManager.moveExplorer(directionManager.getCurrentDirection());
-                logger.trace("Moving F to new position: [{}, {}]", positionManager.getPosition()[0], positionManager.getPosition()[1]);
-                pathSequence.append('F');
+                explorerMovement.setState('F', directionManager.getCurrentDirection());
                 moved = true;
             } 
 
             // Case II: if the space to the right of the explorer is empty, move the explorer right
             if (isRightFree()) {
-                directionManager.turnExplorer('R');
-                pathSequence.append("R");
+                explorerMovement.setState('R', directionManager.getCurrentDirection());
                 logger.trace("Moving R to new face: {}", directionManager.getFacingDirection());       
                 moved = true; 
             }
 
             // Case III: the explorer is currently facing the wall
             if (!moved) {
-                directionManager.turnExplorer('L');
+                explorerMovement.setState('L', directionManager.getCurrentDirection());
                 logger.trace("Moving L to new face: {}", directionManager.getFacingDirection());
-                pathSequence.append('L');
             }
         }
-        this.rightHandPath = pathSequence.toString();
     }
 
     private boolean isExplorerAtExit() {
@@ -106,6 +98,6 @@ public class RightHandAlgorithm implements MoveAlgorithm {
     
     @Override
     public String getAlgorithmPath() {
-        return this.rightHandPath;
+        return pathManager.getPath();
     }
 }
