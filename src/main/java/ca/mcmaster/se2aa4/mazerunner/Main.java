@@ -70,12 +70,11 @@ public class Main {
 
     private static void findPath(Maze maze, PathFormatter formatter) {
         maze.setMazeOpenings('E');  // assume we start at the east entrance
-        DirectionAnalyzer directionAnalyzer = new DirectionAnalyzer('E', maze, maze.getEntrance());
         
         logger.info("**** Computing path");
         logger.warn("PATH NOT COMPUTED");
         // determines the path sequence to exit the maze starting from the west side
-        MazeExplorer finder = new PathFinder(maze, directionAnalyzer, new RightHandAlgorithm());
+        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm());
         finder.exploreMaze();
 
         String result = finder.getPathResult();  
@@ -87,8 +86,7 @@ public class Main {
     private static String verifyPath(Maze maze, char entrance, String moveSequence) {
         // verifies the path sequence based on the given entrance
         maze.setMazeOpenings(entrance);
-        DirectionAnalyzer directionAnalyzer = new DirectionAnalyzer(entrance, maze, maze.getEntrance());
-        MazeExplorer verifier = new PathVerifier(maze, directionAnalyzer, moveSequence);
+        MazeExplorer verifier = new PathVerifier(entrance, maze, moveSequence);
         verifier.exploreMaze();
         return verifier.getPathResult();
     }

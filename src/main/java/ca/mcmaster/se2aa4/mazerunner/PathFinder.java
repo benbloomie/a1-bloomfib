@@ -6,9 +6,9 @@ public class PathFinder implements MazeExplorer {
     private MoveAlgorithm algorithm;
     private String pathResult;
 
-    public PathFinder(Maze maze, DirectionAnalyzer directionAnalyzer, MoveAlgorithm algorithm) {
+    public PathFinder(char startingDirection, Maze maze, MoveAlgorithm algorithm) {
         this.maze = maze;
-        this.directionAnalyzer = directionAnalyzer;
+        this.directionAnalyzer = new DirectionAnalyzer(startingDirection, maze, maze.getEntrance());
         this.algorithm = algorithm;
     }
 

@@ -9,9 +9,9 @@ public class PathVerifier implements MazeExplorer {
     private DirectionAnalyzer directionAnalyzer;
     private String moveSequence;
 
-    public PathVerifier(Maze maze, DirectionAnalyzer directionAnalyzer, String moveSequence) {
+    public PathVerifier(char staringDirection, Maze maze, String moveSequence) {
         this.maze = maze;
-        this.directionAnalyzer = directionAnalyzer;
+        this.directionAnalyzer = new DirectionAnalyzer(staringDirection, maze, maze.getEntrance());
         this.moveSequence = moveSequence;
     }
 
