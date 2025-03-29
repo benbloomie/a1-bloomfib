@@ -1,21 +1,22 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
 public class PathFinder implements MazeExplorer {
-    private Maze maze;
-    private DirectionAnalyzer directionAnalyzer;
+    private PositionManager positionManager;
+    private DirectionManager directionManager;
     private MoveAlgorithm algorithm;
     private String pathResult;
 
     public PathFinder(char startingDirection, Maze maze, MoveAlgorithm algorithm) {
-        this.maze = maze;
-        this.directionAnalyzer = new DirectionAnalyzer(startingDirection, maze, maze.getEntrance());
+        this.positionManager = new PositionManager(maze, maze.getEntrance());
+        this.directionManager = new DirectionManager(startingDirection);
         this.algorithm = algorithm;
     }
 
     @Override 
     public void exploreMaze() {
+        algorithm.setManagers(positionManager, directionManager);
         // calls the MoveAlgorithm defined methods to find the path
-        algorithm.findPath(maze, directionAnalyzer);
+        algorithm.findPath();
         this.pathResult = algorithm.getAlgorithmPath();
     }
 

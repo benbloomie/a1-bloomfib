@@ -6,12 +6,14 @@ import org.apache.logging.log4j.Logger;
 public class PathVerifier implements MazeExplorer {
     private static final Logger logger = LogManager.getLogger();
     private Maze maze;
-    private DirectionAnalyzer directionAnalyzer;
+    private PositionManager positionManager;
+    private DirectionManager directionManager;
     private String moveSequence;
 
-    public PathVerifier(char staringDirection, Maze maze, String moveSequence) {
+    public PathVerifier(char startingDirection, Maze maze, String moveSequence) {
         this.maze = maze;
-        this.directionAnalyzer = new DirectionAnalyzer(staringDirection, maze, maze.getEntrance());
+        this.positionManager = new PositionManager(maze, maze.getEntrance());
+        this.directionManager = new DirectionManager(startingDirection);
         this.moveSequence = moveSequence;
     }
 
@@ -21,9 +23,12 @@ public class PathVerifier implements MazeExplorer {
         for (int i = 0; i < moveSequence.length(); i++) {
             char currentMove = moveSequence.charAt(i);
             // checks if the direction is accepted before processing the move
-            if (currentMove == 'F' || currentMove == 'R' || currentMove == 'L') {
-                directionAnalyzer.moveExplorer(currentMove);  // passes through each move to update the position
-                logger.trace("Move {}: {} in direction {}", i + 1, currentMove, directionAnalyzer.getFacingDirection()); // log each move
+            if (currentMove == 'R' || currentMove == 'L') {
+                directionManager.turnExplorer(currentMove);  // passes through each move to update the position
+                logger.trace("Move {}: {} in direction {}", i + 1, currentMove, directionManager.getFacingDirection()); // log each move
+            }
+            else if (currentMove == 'F') {
+                positionManager.moveExplorer(directionManager.getCurrentDirection());
             }
             // if the current character is a space, do nothing
             else if (currentMove != ' ') {
@@ -36,7 +41,7 @@ public class PathVerifier implements MazeExplorer {
     private boolean isExplorerAtExit() {
         // initializes arrays for the exit position and the position that the explorer ends at
         int[] exitPosition = maze.getExit();
-        int[] currentPosition = directionAnalyzer.getPosition();
+        int[] currentPosition = positionManager.getPosition();
         logger.trace("Exit position: {} ", exitPosition);
         logger.info("Current position: {} ", currentPosition);
         // compares row and column positions after all path moves have been made --> boolean results determines if explorer escaped

@@ -74,7 +74,7 @@ public class Main {
         logger.info("**** Computing path");
         logger.warn("PATH NOT COMPUTED");
         // determines the path sequence to exit the maze starting from the west side
-        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm());
+        MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm(maze));
         finder.exploreMaze();
 
         String result = finder.getPathResult();  

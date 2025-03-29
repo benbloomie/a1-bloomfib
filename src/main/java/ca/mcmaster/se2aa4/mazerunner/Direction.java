@@ -51,16 +51,6 @@ public enum Direction {
         }
     };
 
-    public Direction setInitialDirection(char startingDirection) {
-        for (Direction direction: values()) {
-            // if the first character of the direction matches the starting direction, intialize that as the starting direction
-            if (direction.name().charAt(0) == startingDirection) {
-                return direction;
-            }
-        }
-        throw new IllegalArgumentException("Cannot initialize starting direction to be " + startingDirection);
-    }
-
     public Direction turnLeft() {
         // uses modular arithmetic to calculate the direction the explorer faces 
         int directionValue = ordinal();  // ordinal provides the value of the direction relative to its position in the enum
