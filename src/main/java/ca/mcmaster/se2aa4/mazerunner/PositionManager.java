@@ -27,10 +27,7 @@ public class PositionManager extends MoveObserver {
         direction.makeMove(position, maze);
     }  // keeping this method in for consistent unit testing
 
-    // getter method to access the current position of the traveler
     public int[] getPosition() {
         return position;
     }
-
-
 }
