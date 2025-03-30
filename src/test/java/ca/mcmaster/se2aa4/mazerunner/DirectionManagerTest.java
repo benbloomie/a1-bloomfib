@@ -15,19 +15,19 @@ public class DirectionManagerTest {
     @Test
     void testInitialDirection() {
         directionManager.setInitialDirection('N');
-        assertEquals('N', directionManager.getFacingDirection());
+        assertEquals(Direction.NORTH, directionManager.getCurrentDirection());
     }
 
     @Test
     void testLeftTurn() {
         directionManager.turnExplorer('L');
-        assertEquals('N', directionManager.getFacingDirection());
+        assertEquals(Direction.NORTH, directionManager.getCurrentDirection());
     }
 
     @Test
     void testRightTurn() {
         directionManager.turnExplorer('R');
-        assertEquals('S', directionManager.getFacingDirection());
+        assertEquals(Direction.SOUTH, directionManager.getCurrentDirection());
     }
 
 

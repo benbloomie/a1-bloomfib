@@ -2,6 +2,7 @@ package ca.mcmaster.se2aa4.mazerunner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import java.util.Arrays;
 
 public class PathVerifier implements MazeExplorer {
     private static final Logger logger = LogManager.getLogger();
@@ -39,11 +40,12 @@ public class PathVerifier implements MazeExplorer {
     private boolean isExplorerAtExit() {
         // initializes arrays for the exit position and the position that the explorer ends at
         int[] exitPosition = maze.getExit();
-        int[] currentPosition = positionManager.getPosition();
         logger.trace("Exit position: {} ", exitPosition);
+        
+        int[] currentPosition = positionManager.getPosition();
         logger.info("Current position: {} ", currentPosition);
         // compares row and column positions after all path moves have been made --> boolean results determines if explorer escaped
-        return (currentPosition[0] == exitPosition[0] && currentPosition[1] == exitPosition[1]);
+        return Arrays.equals(currentPosition, exitPosition);
     }
 
     @Override
@@ -53,9 +55,5 @@ public class PathVerifier implements MazeExplorer {
             return "correct path";
         }
         return "incorrect path";
-    }
-
-    public void setNewPath(String moveSequence) {
-        this.moveSequence = moveSequence;
     }
 }

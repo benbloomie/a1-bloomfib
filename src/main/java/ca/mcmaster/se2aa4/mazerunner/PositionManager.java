@@ -15,21 +15,22 @@ public class PositionManager extends MoveObserver {
         subject.attach(this);
     }
 
+    @Override
+    public void update() {
+        if (this.subject.getMove() =='F') {
+            moveExplorer(this.subject.getDirection());;
+            logger.trace("Moving F to new position: [{}, {}]", position[0], position[1]);
+        }
+    }
+
     public void moveExplorer(Direction direction) {
         direction.makeMove(position, maze);
-    }
+    }  // keeping this method in for consistent unit testing
 
     // getter method to access the current position of the traveler
     public int[] getPosition() {
         return position;
     }
 
-    @Override
-    public void update() {
-        if (this.subject.getMove() =='F') {
-            Direction direction = subject.getDirection();
-            direction.makeMove(position, maze);
-            logger.trace("Moving F to new position: [{}, {}]", position[0], position[1]);
-        }
-    }
+
 }
