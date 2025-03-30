@@ -1,10 +1,22 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-public class ExplorerMovement extends Subject {
+import java.util.Stack;
 
-    public void setState(char move, Direction direction) {
-        this.move = move;
-        this.direction = direction;
-        this.notifyAllObservers();
+public class ExplorerMovement {
+    private Stack<MoveCommand> commandHistory = new Stack<>();
+
+    public void makeMove(MoveCommand newMove) {
+        newMove.execute();
+        commandHistory.push(newMove);
+    }
+
+    public void undo() {
+        if (commandHistory.isEmpty()) {
+            return;
+        }
+        MoveCommand prevMove = commandHistory.pop();
+        if (prevMove != null) {
+            prevMove.undo();
+        }
     }
 }

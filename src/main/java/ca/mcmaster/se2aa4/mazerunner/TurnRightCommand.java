@@ -1,21 +1,18 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-public class TurnRightCommand implements MoveCommand {
-    private ExplorerMovement explorerMovement;
-    private Direction direction;
+public class TurnRightCommand extends MoveCommand {
 
-    public TurnRightCommand(ExplorerMovement explorerMovement, Direction direction) {
-        this.explorerMovement = explorerMovement;
-        this.direction = direction;
+    public TurnRightCommand(ExplorerState explorerState, DirectionManager directionManager) {
+        super(explorerState, directionManager);
     }
 
     @Override
     public void execute() {
-        explorerMovement.setState('R', direction);
+        explorerState.setState('R', directionManager.getCurrentDirection());
     }
 
     @Override
     public void undo() {
-        explorerMovement.setState('L', direction);
+        explorerState.setState('L', directionManager.getCurrentDirection());
     }
 }

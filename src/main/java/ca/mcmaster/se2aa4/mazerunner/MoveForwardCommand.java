@@ -1,28 +1,25 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-public class MoveForwardCommand implements MoveCommand {
-    private ExplorerMovement explorerMovement;
-    private Direction direction;
+public class MoveForwardCommand extends MoveCommand {
 
-    public MoveForwardCommand(Direction direction, ExplorerMovement explorerMovement) {
-        this.explorerMovement = explorerMovement;
-        this.direction = direction;
+    public MoveForwardCommand(ExplorerState explorerState, DirectionManager directionManager) {
+        super(explorerState, directionManager);
     }
 
     @Override
     public void execute() {
-        explorerMovement.setState('F', direction);
+        explorerState.setState('F', directionManager.getCurrentDirection());
     }
 
     @Override 
     public void undo() {
         turnAround();
-        explorerMovement.setState('F', direction);
+        explorerState.setState('F', directionManager.getCurrentDirection());
         turnAround();
     }
 
     private void turnAround() {
-        explorerMovement.setState('R', direction);
-        explorerMovement.setState('R', direction);
+        explorerState.setState('R', directionManager.getCurrentDirection());
+        explorerState.setState('R', directionManager.getCurrentDirection());
     }
 }

@@ -10,38 +10,40 @@ public class RightHandAlgorithm implements MoveAlgorithm {
     private int[][] positions = {{-1,0}, {0,1}, {1,0}, {0,-1}};  // move positions to represent each direction
     private PositionManager positionManager;
     private DirectionManager directionManager;
-    private ExplorerMovement explorerMovement;
+    private ExplorerState explorerState;
     private PathManager pathManager;
+    private ExplorerMovement movement;
 
     public RightHandAlgorithm(char startingDirection, Maze maze) {
         this.maze = maze;
-        this.explorerMovement = new ExplorerMovement();
-        this.positionManager = new PositionManager(maze, maze.getEntrance(), explorerMovement);
-        this.directionManager = new DirectionManager(startingDirection, explorerMovement);
-        this.pathManager = new PathManager(explorerMovement);
+        this.explorerState = new ExplorerState();
+        this.positionManager = new PositionManager(maze, maze.getEntrance(), explorerState);
+        this.directionManager = new DirectionManager(startingDirection, explorerState);
+        this.pathManager = new PathManager(explorerState);    
+        this.movement = new ExplorerMovement();
     }
 
     @Override
     public void findPath() {
         // loops until the explorer has reached the exit
         while (!isExplorerAtExit()) {
-            boolean moved = false;
 
-            // Case I: if an empty space is present in the direction that the explorer is facing, move the explorer forward
-            if (isForwardFree()) {
-                explorerMovement.setState('F', directionManager.getCurrentDirection());
-                moved = true;
-            } 
-
-            // Case II: if the space to the right of the explorer is empty, move the explorer right
-            if (isRightFree()) {
-                explorerMovement.setState('R', directionManager.getCurrentDirection());
-                moved = true; 
+            // Case I: if the space to the right of the explorer is empty, move the explorer right
+            if (isRightFree()) { 
+                MoveCommand rightTurn = new TurnRightCommand(explorerState, directionManager);
+                movement.makeMove(rightTurn);
+                MoveCommand moveForward = new MoveForwardCommand(explorerState, directionManager);
+                movement.makeMove(moveForward);
             }
-
+            // Case II: if an empty space is present in the direction that the explorer is facing, move the explorer forward
+            else if (isForwardFree()) {
+                MoveCommand moveForward = new MoveForwardCommand(explorerState, directionManager);
+                movement.makeMove(moveForward);
+            } 
             // Case III: the explorer is currently facing the wall
-            if (!moved) {
-                explorerMovement.setState('L', directionManager.getCurrentDirection());
+            else {
+                MoveCommand leftTurn = new TurnLeftCommand(explorerState, directionManager);
+                movement.makeMove(leftTurn);
             }
         }
     }

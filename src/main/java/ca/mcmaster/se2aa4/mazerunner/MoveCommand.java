@@ -1,6 +1,15 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-public interface MoveCommand {
-    public void execute();
-    public void undo();
+public abstract class MoveCommand {
+    protected ExplorerState explorerState;
+    protected DirectionManager directionManager;
+
+    MoveCommand(ExplorerState explorerState, DirectionManager directionManager) {
+        this.explorerState = explorerState;
+        this.directionManager = directionManager;
+    }
+
+    public abstract void execute();
+
+    public abstract void undo();
 }
