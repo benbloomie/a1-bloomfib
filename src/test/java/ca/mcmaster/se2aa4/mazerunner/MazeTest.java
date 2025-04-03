@@ -10,12 +10,10 @@ public class MazeTest {
 
     @BeforeEach
     void createMaze() {
-        maze = new Maze(MAZE);
-    }
-
-    @Test
-    void testFileReading() {
-        assertNotNull(maze.getMaze());
+        maze = new Maze.MazeBuilder()
+            .loadMazeFromFile(MAZE)
+            .withStartingDirection('E')
+            .build();
     }
 
     @Test
@@ -32,25 +30,37 @@ public class MazeTest {
 
     @Test
     void testMazeEntranceFacingEast() {
-        maze.setMazeOpenings('E'); 
+        Maze maze = new Maze.MazeBuilder()
+            .loadMazeFromFile(MAZE)
+            .withStartingDirection('E')
+            .build();
         assertArrayEquals(new int[]{8, 0}, maze.getEntrance());
     }
 
     @Test
     void testMazeEntranceFacingWest() {
-        maze.setMazeOpenings('W'); 
+        Maze maze = new Maze.MazeBuilder()
+            .loadMazeFromFile(MAZE)
+            .withStartingDirection('W')
+            .build(); 
         assertArrayEquals(new int[]{5, 10}, maze.getEntrance());
     }
 
     @Test
     void testMazeExitFacingEast() {
-        maze.setMazeOpenings('E'); 
+        Maze maze = new Maze.MazeBuilder()
+            .loadMazeFromFile(MAZE)
+            .withStartingDirection('E')
+            .build();
         assertArrayEquals(new int[]{5, 10}, maze.getExit());
     }
      
     @Test
     void testMazeExitFacingWest() {
-        maze.setMazeOpenings('W'); 
+        Maze maze = new Maze.MazeBuilder()
+            .loadMazeFromFile(MAZE)
+            .withStartingDirection('W')
+            .build();
         assertArrayEquals(new int[]{8, 0}, maze.getExit());
     }
 

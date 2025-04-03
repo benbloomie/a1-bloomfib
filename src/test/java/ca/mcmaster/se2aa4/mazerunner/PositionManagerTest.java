@@ -2,6 +2,7 @@ package ca.mcmaster.se2aa4.mazerunner;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
+import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,8 +12,11 @@ public class PositionManagerTest {
     private static final String MAZE = "./examples/tiny.maz.txt";
 
     @BeforeEach
-    void createMaze() {
-        maze = new Maze(MAZE);
+    void createMaze() throws IOException {
+        maze = new Maze.MazeBuilder()
+            .loadMazeFromFile(MAZE)
+            .withStartingDirection('E')
+            .build();
         positionManager = new PositionManager(maze, new int[]{3, 3}, new ExplorerState());  // starts explorer at an open position
     }
 

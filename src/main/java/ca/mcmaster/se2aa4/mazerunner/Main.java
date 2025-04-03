@@ -15,19 +15,15 @@ public class Main {
             CommandLine cmd = parser.parse(options, args);  // parses the command-line arguments
             String mazeFile = cmd.getOptionValue("i");  // gets the string associated witb the i flag
             String moveSequence = cmd.getOptionValue("p");  // gets the string associated witb the p flag
-
-            Maze maze = new Maze(mazeFile);
             PathFormatter formatter = new PathFormatter();
+
             logger.info("** Starting Maze Runner");
-
-            // checks if the user provided a move sequence to determine which algorithm to call
+            // checks if the user provided a move sequence (-p flag) to determine which algorithm to call
             if (moveSequence != null) {
-                analyzePath(maze, formatter, moveSequence);
-            }
-
-            // if no -p flag is present, find the exit path sequence
+                analyzePath(mazeFile, formatter, moveSequence);
+            } 
             else {
-                findPath(maze, formatter);
+                findPath(mazeFile, formatter);
             }
             logger.info("** End of MazeRunner");
 
@@ -43,7 +39,6 @@ public class Main {
         flagOptions.addOption(iFlag);
         Option pFlag = setOption("p", "Move path containing various move directions", "N");
         flagOptions.addOption(pFlag);
-
         return flagOptions;
     }
 
@@ -57,22 +52,23 @@ public class Main {
         return cmdFlag;
     }
 
-    private static void analyzePath(Maze maze, PathFormatter formatter, String moveSequence) {
+    private static void analyzePath(String mazeFile, PathFormatter formatter, String moveSequence) {
         logger.info("**** Verifying path");
         formatter.setCanonicalPath(moveSequence);
         moveSequence = formatter.getCanonicalPath();  // converts the moveSequence to its canonical form before proceeding
         
         // calls the verify path method for both starting directions
-        String result1 = verifyPath(maze, 'E', moveSequence);
-        String result2 = verifyPath(maze, 'W', moveSequence);
+        String result1 = verifyPath(mazeFile, 'E', moveSequence);
+        String result2 = verifyPath(mazeFile, 'W', moveSequence);
         System.out.println(getResult(result1, result2));
     }
 
-    private static void findPath(Maze maze, PathFormatter formatter) {
-        maze.setMazeOpenings('E');  // assume we start at the east entrance
-        
-        logger.info("**** Computing path");
-        logger.warn("PATH NOT COMPUTED");
+    private static void findPath(String mazeFile, PathFormatter formatter) {
+        Maze maze = new Maze.MazeBuilder()
+            .loadMazeFromFile(mazeFile)
+            .withStartingDirection('E')
+            .build();
+
         // determines the path sequence to exit the maze starting from the west side
         MazeExplorer finder = new PathFinder('E', maze, new RightHandAlgorithm('E', maze));
         finder.exploreMaze();
@@ -83,9 +79,12 @@ public class Main {
         System.out.println(factorizedPathSequence);
     }
 
-    private static String verifyPath(Maze maze, char entrance, String moveSequence) {
+    private static String verifyPath(String mazeFile, char entrance, String moveSequence) {
         // verifies the path sequence based on the given entrance
-        maze.setMazeOpenings(entrance);
+        Maze maze = new Maze.MazeBuilder()
+            .loadMazeFromFile(mazeFile)
+            .withStartingDirection(entrance)
+            .build();
         MazeExplorer verifier = new PathVerifier(entrance, maze, moveSequence);
         verifier.exploreMaze();
         return verifier.getPathResult();

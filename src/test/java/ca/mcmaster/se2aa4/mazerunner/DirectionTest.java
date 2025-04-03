@@ -11,7 +11,10 @@ public class DirectionTest {
 
     @BeforeEach
     void setUpExplorer() {
-        maze = new Maze(MAZE);
+        maze = new Maze.MazeBuilder()
+            .loadMazeFromFile(MAZE)
+            .withStartingDirection('E')
+            .build();
         position = new int[]{3, 11};  // starts the explorer in an open position
     }
 

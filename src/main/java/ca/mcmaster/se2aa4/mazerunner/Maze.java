@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Maze {
-    private static final Logger logger = LogManager.getLogger();  
     // private attributes to store the information of the maze properties
     private char[][] maze;
     private int numColumns;
@@ -14,107 +13,107 @@ public class Maze {
     private int[] exit;
     private int[] entrance;
 
-    public Maze(String mazeFile) {
-        this.maze = createMaze(mazeFile);
-        // throw an exception when reading from a file that does not exist
-        if (this.maze == null) {
-            throw new IllegalArgumentException("Could not read maze file. Missing -i flag, or bad file path.");  
-        }
+    private Maze(MazeBuilder mazeBuilder) {
+        this.maze = mazeBuilder.maze;
+        this.numRows = mazeBuilder.numRows;
+        this.numColumns = mazeBuilder.numColumns;
+        this.entrance = mazeBuilder.entrance;
+        this.exit = mazeBuilder.exit;
     }
 
-    public char[][] createMaze(String mazeFile) {
-        logger.info("**** Reading the maze from file: {}", mazeFile);
-        try {
-            List<String> linesInMaze = readMazeFile(mazeFile);  // stores each line of the text file in an ArrayList    
-            this.numColumns = linesInMaze.get(0).length();  // calculates the number of columns using the length of a line
-            this.numRows = linesInMaze.size();  // calculates the number of rows using the number of elements in the array
-            
-            char[][] tempMaze = new char[numRows][numColumns];      
-            populateMaze(linesInMaze, tempMaze);
+    public static class MazeBuilder {
+        private static final Logger logger = LogManager.getLogger(); 
+        private char[][] maze;
+        private int numColumns;
+        private int numRows;
+        private int[] exit;
+        private int[] entrance;
 
-            return tempMaze;
-
-        } catch(IOException e) {
-            logger.error("/!\\ An error has occured: Unable to read data from {} /!\\", mazeFile);
-        } catch(Exception e) {
-            logger.error("/!\\\\ An error has occured /!\\\\: {}", e.getMessage());
+        public MazeBuilder loadMazeFromFile(String mazeFile)  {
+            logger.info("**** Reading the maze from file: {}", mazeFile);
+            try {
+                List<String> linesInMaze = readMazeFile(mazeFile);  // stores each line of the text file in an ArrayList    
+                this.numColumns = linesInMaze.get(0).length();  // calculates the number of columns using the length of a line
+                this.numRows = linesInMaze.size();  // calculates the number of rows using the number of elements in the array
+                
+                this.maze = new char[numRows][numColumns];      
+                populateMaze(linesInMaze);
+            } 
+            catch (IOException e) {
+                throw new IllegalArgumentException("Could not read maze file: " + mazeFile);
+            }
+            return this;
         }
-        return null;  // returns null if an error occurs while reading the maze
-    }
+        
+        public MazeBuilder withStartingDirection(char facingDirection) {
+            // determines what side of the maze the explorer starts on
+            if (facingDirection == 'E') {
+                this.entrance = findWestOpening();
+                this.exit = findEastOpening();
+            }
+            else if (facingDirection == 'W') {
+                this.entrance = findEastOpening();
+                this.exit = findWestOpening();
+            }
+            logger.info("Set entrance position to [{},{}]", this.entrance[0], this.entrance[1]);
+            logger.info("Set exit position to [{},{}]", this.exit[0], this.exit[1]);
+            return this;
+        }
 
-    private List<String> readMazeFile(String mazeFile) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(mazeFile));
-        List<String> linesInMaze = new ArrayList<>();
-        String mazeLine;
+        public Maze build() {
+            return new Maze(this);
+        }
+
+        private List<String> readMazeFile(String mazeFile) throws IOException {
+            BufferedReader reader = new BufferedReader(new FileReader(mazeFile));
+            List<String> linesInMaze = new ArrayList<>();
+            String mazeLine;
+
+            // reads in each line of the maze as a string, and adds it to the ArrayList
+            while ((mazeLine = reader.readLine()) != null) {
+                linesInMaze.add(mazeLine);
+            }
+            reader.close();
+            return linesInMaze;
+        }
+
+        private void populateMaze(List<String> linesInMaze) {
+            for (int i = 0; i < numRows; i++) {
+                String line = linesInMaze.get(i);
+                if (line.isEmpty()) {
+                    line = " ".repeat(numRows);  // replace empty lines with the empty line string
+                }
+                logger.trace("Adding string: {}", line);
+
+                for (int j = 0; j < numColumns; j++) {
+                    this.maze[i][j] = line.charAt(j);
+                }
+            }
+        }
+
+        private int[] findWestOpening() {
+            logger.trace("**** Searching west entrance...");  
+            for (int i = 0; i < this.numRows; i++) {
+                // searches the left wall for an opening, and returns the position of the open tile
+                if (this.maze[i][0] == ' ') {
+                    logger.info("West opening at: [{}, {}] (Row, column)", i, 0);
+                    return new int[]{i, 0};
+                }
+            }
+            throw new IllegalArgumentException("Unsolvable maze. Contains no east opening");  
+        }
     
-        // reads in each line of the maze as a string, and adds it to the ArrayList
-        while ((mazeLine = reader.readLine()) != null) {
-            linesInMaze.add(mazeLine);
-        }
-        reader.close();
-        return linesInMaze;
-    }
-
-    private void populateMaze(List<String> linesInMaze, char[][] tempMaze) {
-        // iterates through each string in the ArrayList to create the 2D array of the maze
-        for (int i = 0; i < this.numRows; i++) {
-            String line = linesInMaze.get(i);
-            if (line.isEmpty()) {
-                line = createEmptyLine();  // replace empty lines with the empty line string
+        private int[] findEastOpening() {
+            logger.trace("**** Searching for east entrance...");  
+            for (int i = 0; i < this.numRows; i++) {
+                // searches the right wall for an opening, and returns the position of the open tile
+                if (this.maze[i][numColumns - 1] == ' ') {
+                    logger.info("East opening at: [{}, {}] (Row, column)", i, numColumns - 1);
+                    return new int[]{i, numColumns - 1};
+                }
             }
-            logger.trace("Adding string: {}", line);
-
-            // populates the 2D array with the characters
-            for (int j = 0; j < this.numColumns; j++) {
-                tempMaze[i][j] = line.charAt(j); 
-            }
+            throw new IllegalArgumentException("Unsolvable maze. Contains no west opening");  
         }
-    }
-
-    private String createEmptyLine() {
-        StringBuffer emptyLineString = new StringBuffer();
-        // reads over the number of columns, and adds an empty space for each occurence
-        for (int i = 0; i < this.numColumns; i++) {
-            emptyLineString.append(" ");
-        }
-        return emptyLineString.toString();  // returns a String for that represents a completely empty line
-    }
-
-    private int[] findWestOpening() {
-        logger.trace("**** Searching west entrance...");  
-        for (int i = 0; i < this.numRows; i++) {
-            // searches the left wall for an opening, and returns the position of the open tile
-            if (this.maze[i][0] == ' ') {
-                logger.info("West opening at: [{}, {}] (Row, column)", i, 0);
-                return new int[]{i, 0};
-            }
-        }
-        throw new IllegalArgumentException("Unsolvable maze. Contains no east opening");  
-    }
-
-    private int[] findEastOpening() {
-        logger.trace("**** Searching for east entrance...");  
-        for (int i = 0; i < this.numRows; i++) {
-            // searches the right wall for an opening, and returns the position of the open tile
-            if (this.maze[i][numColumns - 1] == ' ') {
-                logger.info("East opening at: [{}, {}] (Row, column)", i, numColumns - 1);
-                return new int[]{i, numColumns - 1};
-            }
-        }
-        throw new IllegalArgumentException("Unsolvable maze. Contains no west opening");  
-    }
-
-    public void printMaze() {
-        for (int i = 0; i < this.numRows; i++) {
-            for (int j = 0; j < this.numColumns; j++) {
-                System.out.print(this.maze[i][j]);
-            }
-            System.out.println();
-        }
-    }
-
-    public char[][] getMaze() {
-        return this.maze;
     }
 
     public int getLength() {
@@ -127,20 +126,6 @@ public class Maze {
 
     public char getTile(int row, int column) {
         return maze[row][column];
-    }
-
-    public void setMazeOpenings(char facingDirection) {
-        // determines what side of the maze the explorer starts on
-        if (facingDirection == 'E') {
-            this.entrance = findWestOpening();
-            this.exit = findEastOpening();
-        }
-        else if (facingDirection == 'W') {
-            this.entrance = findEastOpening();
-            this.exit = findWestOpening();
-        }
-        logger.info("Set entrance position to [{},{}]", this.entrance[0], this.entrance[1]);
-        logger.info("Set exit position to [{},{}]", this.exit[0], this.exit[1]);
     }
 
     public int[] getEntrance() {
